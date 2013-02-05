@@ -1,0 +1,119 @@
+/***********************************************/
+/*                  Main blocks                */
+/***********************************************/
+body {
+  margin: auto;
+}
+/***********************************************/
+#page {
+  margin: 1%;
+  width: 98%;
+  min-width: 1024px;
+  max-width: 2480px;
+}
+/***********************************************/
+#header {
+  height: 148px;
+  border: 1px solid #000000;
+  background-image: url(images/header.png);
+  background-repeat: no-repeat;
+}
+/***********************************************/
+div.header_menu_link {
+  margin: 12px 12px 12px 0px;
+  padding: 12px;
+  float: right;
+  width: 114px;
+  height: 24px;
+  text-align: center;
+  border: 1px solid #000000;
+}
+/***********************************************/
+#left {
+  margin-top: 1%;
+  margin-bottom: 1%;
+  padding: 12px;
+  float: left;
+  width: 214px;
+  height: 294px;
+  border: 1px solid #000000;
+}
+/***********************************************/
+#right {
+  margin-top: 1%;
+  margin-bottom: 1%;
+  float: right;
+  width: 238px;
+  height: 318px;
+  overflow: auto;
+  border: 1px solid #000000;
+}
+div.right_news {
+  margin: 12px;
+  padding: 12px;
+  border: 1px solid #000000;
+}
+/***********************************************/
+#center {
+  margin: 1% 250px 1% 250px;
+  padding: 12px;
+  border: 1px solid #000000;
+}
+/***********************************************/
+th {
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+}
+/***********************************************/
+#footer {
+  clear: both;
+  height: 98px;
+  border: 1px solid #000000;
+  background-image: url(images/footer.png);
+  background-repeat: no-repeat;
+}
+/***********************************************/
+#alert {
+  padding: 12px;
+  position: fixed;
+  top: 1%;
+  left: 1%;
+  border: 1 solid #000000;
+  background-color: #FFFFFF;
+  box-shadow: 0 0 12px #000000;
+}
+/***********************************************/
+#popup {
+  padding: 12px;
+  position: fixed;
+  left: 40%;
+  top: 30%;
+  border: 1 solid #000000;
+  background-color: #FFFFFF;
+  box-shadow: 0 0 128px #000000;
+}
+/***********************************************/
+.button {
+  margin: 2px;
+  padding: 1px 6px;
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  color: buttontext;
+  background-color: buttonface;
+  border: 1px solid #000000;
+  border-radius: 5px;
+}
+/***********************************************/
+.button:hover {
+  color: buttontext;
+  border: 1px solid #000000;
+  box-shadow: 0 0 5px #0099CC;
+}
+/***********************************************/
+.button:active{
+  background-color: #0099CC;
+  border: 1px solid #000000;
+}
+/***********************************************/
