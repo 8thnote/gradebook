@@ -1,8 +1,7 @@
 <?php
-require_once('includes/boot.inc.php');
+define('ROOT_DIR', getcwd());
+require_once 'includes/boot.inc.php';
 session_start();
-globals_init();
 db_connect();
-process();
-render();
+execute();
 ?>

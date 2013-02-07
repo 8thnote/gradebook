@@ -1,29 +1,22 @@
 <?php
 
-function globals_init() {
-  $GLOBALS['page'] = array(
+function render_template($template_file, $vars) {
+  extract($vars, EXTR_SKIP);
+  ob_start();
+  include "template/templates/$template_file.tpl.php";
+  return ob_get_clean();
+}
+
+
+function execute() {
+  $vars = array(
     'title'      => 'title',
     'header'     => 'header',
     'breadcrumb' => 'breadcrumb',
     'content'    => 'content',
     'footer'     => 'footer',
   );
-}
-
-function process() {
-}
-
-function get_tpl($tpl) {
-  global $page;
-  ob_start();
-  require_once("template/templates/$tpl.tpl.php");
-  $output = ob_get_contents();
-  ob_end_clean();
-  return $output;
-}
-
-function render() {
-  print get_tpl('html');
+  print render_template('html', $vars);
 }
 
 function get_page($path) {
