@@ -1,6 +1,5 @@
 <?php
-$word = array
-( 
+$word = array( 
 	'hello' => 'Привіт',
 );
 ?>
