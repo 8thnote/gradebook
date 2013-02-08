@@ -1,1 +1,2 @@
-settings/settings.ini
+# ignore settings folder
+settings/

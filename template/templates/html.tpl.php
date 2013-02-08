@@ -9,7 +9,7 @@
 <body>
   <div id="container">
     <div id="header"><?php print $header; ?></div>
-    <?php if ($breadcrumb) { ?>
+    <?php if (!empty($breadcrumb)) { ?>
       <div id="breadcrumb"><?php print $breadcrumb; ?></div>
     <?php } ?>
     <div id="content"><?php print $content; ?></div>
