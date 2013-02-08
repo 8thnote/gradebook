@@ -1,6 +1,6 @@
 <?php
 
-function get_attributes($attributes = array()) {
+function get_attributes($attributes) {
   foreach ($attributes as $attribute => &$data) {
     $data = implode(' ', (array) $data);
     $data = $attribute . '="' . $data . '"';
@@ -8,10 +8,7 @@ function get_attributes($attributes = array()) {
   return $attributes ? ' ' . implode(' ', $attributes) : '';
 }
 
-function l($text, $path, $attributes = array()) {
-  if (empty($path)) {
-    $path = 'frontpage';
-  }
+function l($text, $path = 'frontpage', $attributes = array()) {
   if ($path == get_path()) {
     $attributes['class'][] = 'active';
   }
