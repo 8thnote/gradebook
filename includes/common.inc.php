@@ -13,21 +13,10 @@ function get_path() {
 }
 
 function execute() {
-  $page = get_page();
-  $vars = array(
-    'header' => render_template('header',
-      array(
-        'menu' => item_list(
-          array(
-            l('Front', ''),
-            l('Authorization', 'authorization'),
-          )
-        ),
-      )
-    ),
-    'footer' => render_template('footer'),
-  );
-  foreach ($page as $element => $function) {
+  $vars = array();
+  $vars['header'] = render_template('header', array('menu' => get_menu()));
+  $vars['footer'] = render_template('footer');
+  foreach (get_page() as $element => $function) {
     if (function_exists ($function)) {
       $vars[$element] = $function();
     }
@@ -94,6 +83,25 @@ function get_page() {
     }
   }
   return !empty($page) ? $page : $pages_info['page_not_found'];
+}
+
+function get_menu() {
+  $menu_items = array(
+    l('Front', ''),
+    l('Authorization', 'authorization'),
+  );
+  return item_list($menu_items);
+}
+
+function alert($message) {
+  global $messages;
+  $messages[] = $message;
+}
+
+function clear($text) {
+  $text = stripslashes($text);
+  $text = htmlspecialchars($text);
+  return $text;
 }
 
 ?>

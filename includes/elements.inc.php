@@ -8,7 +8,10 @@ function get_attributes($attributes) {
   return $attributes ? ' ' . implode(' ', $attributes) : '';
 }
 
-function l($text, $path = 'frontpage', $attributes = array()) {
+function l($text, $path, $attributes = array()) {
+  if (empty($path)) {
+    $path = 'frontpage';
+  }
   if ($path == get_path()) {
     $attributes['class'][] = 'active';
   }
@@ -16,21 +19,12 @@ function l($text, $path = 'frontpage', $attributes = array()) {
 }
 
 function item_list($items, $type = 'ul') {
-  $output  = '<' . $type . '>';
+  $output = '<' . $type . '>';
   foreach ($items as $item) {
     $output .= '<li>' . $item . '</li>';
   }
   $output .= '</' . $type . '>';
   return $output;
-}
-
-function alert($message, $time = 1, $url = NULL) {
-}
-
-function clear($text) {
-  $text = stripslashes($text);
-  $text = htmlspecialchars($text);
-  return $text;
 }
 
 ?>
