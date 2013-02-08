@@ -1,27 +1,23 @@
 <?php
 
+function base_path() {
+  return rtrim(dirname($_SERVER['SCRIPT_NAME']), '\/');
+}
+
 function base_url() {
   $is_https  = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on';
   $protocol  = $is_https ? 'https' : 'http';
   $base_host = $_SERVER['HTTP_HOST'];
-  $base_path = rtrim(dirname($_SERVER['SCRIPT_NAME']), '\/');
-  return $protocol . '://' . $_SERVER['HTTP_HOST'] . $base_path;
+  return $protocol . '://' . $_SERVER['HTTP_HOST'] . BASE_PATH;
 }
 
 function get_path() {
   return !empty($_GET['q']) ? $_GET['q'] : 'frontpage';
 }
 
-function execute() {
-  $vars = array();
-  $vars['header'] = render_template('header', array('menu' => get_menu()));
-  $vars['footer'] = render_template('footer');
-  foreach (get_page() as $element => $function) {
-    if (function_exists ($function)) {
-      $vars[$element] = $function();
-    }
-  }
-  print render_template('html', $vars);
+function url($path) {
+  $parse_path = parse_url($path);
+  return empty($parse_path['scheme']) ? BASE_PATH . '/' . $path : $path;
 }
 
 function render_template($template_file, $vars = array()) {
@@ -85,23 +81,39 @@ function get_page() {
   return !empty($page) ? $page : $pages_info['page_not_found'];
 }
 
-function get_menu() {
-  $menu_items = array(
-    l('Front', ''),
-    l('Authorization', 'authorization'),
+function execute() {
+  $vars = array(
+    'menu'       => get_menu(),
+    'message'    => get_message(),
+    'copyright'  => get_copyright(),
+    'breadcrumb' => FALSE,
   );
-  return item_list($menu_items);
-}
-
-function alert($message) {
-  global $messages;
-  $messages[] = $message;
+  foreach (get_page() as $element => $function) {
+    if (function_exists ($function)) {
+      $vars[$element] = $function();
+    }
+  }
+  print render_template('html', $vars);
 }
 
 function clear($text) {
   $text = stripslashes($text);
   $text = htmlspecialchars($text);
   return $text;
+}
+
+function alert($message, $type = 'status') {
+  $GLOBALS['message'][$type][] = $message;
+}
+
+function get_message() {
+  $output = array();
+  foreach ($GLOBALS['message'] as $type => $messages) {
+    foreach ($messages as $message) {
+      $output[] = tag('p', $message, array('class' => $type));
+    }
+  }
+  return implode('', $output);
 }
 
 ?>

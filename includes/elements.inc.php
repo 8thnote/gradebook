@@ -1,11 +1,15 @@
 <?php
 
-function get_attributes($attributes) {
+function tag_attributes($attributes) {
   foreach ($attributes as $attribute => &$data) {
     $data = implode(' ', (array) $data);
     $data = $attribute . '="' . $data . '"';
   }
   return $attributes ? ' ' . implode(' ', $attributes) : '';
+}
+
+function tag($tag, $text, $attributes = array()) {
+  return '<' . $tag . tag_attributes($attributes) . '>' . $text . '</' . $tag . '>';
 }
 
 function l($text, $path, $attributes = array()) {
@@ -15,7 +19,8 @@ function l($text, $path, $attributes = array()) {
   if ($path == get_path()) {
     $attributes['class'][] = 'active';
   }
-  return '<a href="' . $path . '"' . get_attributes($attributes) . '>' . $text . '</a>';
+  $attributes['href'] = url($path);
+  return tag('a', $text, $attributes);
 }
 
 function item_list($items, $type = 'ul') {

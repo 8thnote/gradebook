@@ -8,12 +8,15 @@
 </head>
 <body>
   <div id="container">
-    <div id="header"><?php print $header; ?></div>
-    <?php if (!empty($breadcrumb)) { ?>
+    <div id="header"><?php print $menu; ?></div>
+    <?php if ($breadcrumb) { ?>
       <div id="breadcrumb"><?php print $breadcrumb; ?></div>
     <?php } ?>
     <div id="content"><?php print $content; ?></div>
-    <div id="footer"><?php print $footer; ?></div>
+    <div id="footer"><?php print $copyright; ?></div>
   </div>
+  <?php if ($message) { ?>
+    <div id="message"><?php print $message; ?></div>
+  <?php } ?>
 </body>
 </html>
