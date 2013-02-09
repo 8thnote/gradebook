@@ -14,7 +14,17 @@ function front_page_title() {
 }
 
 function front_page_content() {
-  return 'Frontpage content';
+  $table = array(
+    'caption'    => 'table_test',
+    'header'     => array(
+      array('data' => 1),
+      array('data' => 1),
+      array('data' => 3),
+    ),
+    'rows'       => array(),
+    'attributes' => array('id' => 'foo'),
+  );
+  return table($table);
 }
 
 function front_page_access() {

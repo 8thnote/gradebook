@@ -32,6 +32,26 @@ function item_list($items, $type = 'ul') {
   return $output;
 }
 
+function table($vars) {
+  $output = '';
+  if (!empty($vars['caption'])) {
+    $output .= tag('caption', $vars['caption']);
+  }
+  if (!empty($vars['header'])) {
+    $header = '';
+    foreach ($vars['header'] as $header_cell) {
+      $data       = !empty($header_cell['data']) ? $header_cell['data'] : '';
+      $attributes = !empty($header_cell['attributes']) ? $header_cell['attributes'] : array();
+      $header .= tag('th', $data, $attributes);
+    }
+    $output .= tag('tr', $header);
+  }
+  if (!empty($vars['rows'])) {
+   
+  }
+  return !empty($vars['attributes']) ? tag('table', $output, $vars['attributes']) : tag('table', $output);
+}
+
 function form($form) {
   $output     = ''; 
   $attributes = array(
