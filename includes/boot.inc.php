@@ -10,6 +10,4 @@ define('BASE_URL', base_url());
 define('REQUEST_TIME', (int) $_SERVER['REQUEST_TIME']);
 define('IP_ADDRESS', $_SERVER['REMOTE_ADDR']);
 
-$GLOBALS['message'] = array();
-
 ?>

@@ -50,10 +50,9 @@ function pages_info() {
 
 function get_page() {
   $pages_info = pages_info();
-  $path       = get_path();
+  $path_args  = explode('/', get_path());
   $page       = array();
   foreach ($pages_info as $page_info) {
-    $path_args = explode('/', $path);
     $page_args = explode('/', $page_info['path']);
     if (count($path_args) === count($page_args)) {
       $compare = array_diff($page_args, $path_args);
@@ -61,24 +60,31 @@ function get_page() {
         $page = $page_info;
       }
       else {
-        $args  = array();
-        $other = 0;
+        $miss = 0;
         foreach ($compare as $key => $arg) {
-          if ($arg === '%') {
-            $args[] = $path_args[$key];
-          }
-          else {
-            $other ++;
+          if ($arg !== '%') {
+            $miss ++;
           }
         }
-        if (empty($other) && !empty($args)) {
+        if ($miss === 0) {
           $page = $page_info;
-          $page['args'] = $args;
+          $page['args'] = $path_args;
         }
       }
     }
   }
-  return !empty($page) ? $page : $pages_info['page_not_found'];
+  if (!empty($page)) {
+    $page_access_function = $page['access'];
+    if ($page_access_function($path_args)) {
+      return $page;
+    }
+    else {
+      exit('access_denied');
+    }
+  }
+  else {
+    exit('page_not_found');
+  }
 }
 
 function execute() {
@@ -102,16 +108,23 @@ function clear($text) {
   return $text;
 }
 
+function t($text) {
+  return $text;
+}
+
 function alert($message, $type = 'status') {
-  $GLOBALS['message'][$type][] = $message;
+  $_SESSION['message'][$type][] = $message;
 }
 
 function get_message() {
   $output = array();
-  foreach ($GLOBALS['message'] as $type => $messages) {
-    foreach ($messages as $message) {
-      $output[] = tag('p', $message, array('class' => $type));
+  if (!empty($_SESSION['message'])) {
+    foreach ($_SESSION['message'] as $type => $messages) {
+      foreach ($messages as $message) {
+        $output[] = tag('p', $message, array('class' => $type));
+      }
     }
+    $_SESSION['message'] = array();
   }
   return implode('', $output);
 }

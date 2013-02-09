@@ -12,11 +12,11 @@
     <?php if ($breadcrumb) { ?>
       <div id="breadcrumb"><?php print $breadcrumb; ?></div>
     <?php } ?>
+    <?php if ($message) { ?>
+      <div id="message"><?php print $message; ?></div>
+    <?php } ?>
     <div id="content"><?php print $content; ?></div>
     <div id="footer"><?php print $copyright; ?></div>
   </div>
-  <?php if ($message) { ?>
-    <div id="message"><?php print $message; ?></div>
-  <?php } ?>
 </body>
 </html>
