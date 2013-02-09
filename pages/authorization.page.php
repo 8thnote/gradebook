@@ -9,6 +9,10 @@ function authorization_page_info() {
   );
 }
 
+function authorization_page_access() {
+  return TRUE;
+}
+
 function authorization_page_title() {
   return t('Authorization');
 }
@@ -53,10 +57,6 @@ function authorization_page_content() {
     );
   }
   return form($form);
-}
-
-function authorization_page_access() {
-  return TRUE;
 }
 
 function authorization_login_submit($values) {

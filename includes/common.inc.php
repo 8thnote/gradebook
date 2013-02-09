@@ -68,7 +68,6 @@ function get_page() {
         }
         if ($miss === 0) {
           $page = $page_info;
-          $page['args'] = $path_args;
         }
       }
     }
@@ -76,6 +75,7 @@ function get_page() {
   if (!empty($page)) {
     $page_access_function = $page['access'];
     if ($page_access_function($path_args)) {
+      $page['args'] = $path_args;
       return $page;
     }
     else {
@@ -88,15 +88,20 @@ function get_page() {
 }
 
 function execute() {
+  $page = get_page();
   $vars = array(
-    'menu'       => get_menu(),
-    'message'    => get_message(),
-    'copyright'  => get_copyright(),
-    'breadcrumb' => FALSE,
+    'menu'      => get_menu(),
+    'message'   => get_message(),
+    'copyright' => get_copyright(),
   );
-  foreach (get_page() as $element => $function) {
-    if (function_exists ($function)) {
-      $vars[$element] = $function();
+  $elements = array('title', 'breadcrumb', 'content');
+  foreach ($elements as $element) {
+    if (isset($page[$element])) {
+      $function       = $page[$element];
+      $vars[$element] = $function($page['args']);
+    }
+    else {
+      $vars[$element] = FALSE;
     }
   }
   print render_template('html', $vars);

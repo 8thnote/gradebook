@@ -7,15 +7,14 @@ function db_connect() {
   return TRUE;
 }
 
-function db_select_array($db_table, $db_field, $db_condition) {
-  $sql = "SELECT $db_field FROM $db_table WHERE $db_condition";
+function db_select_array($db_table, $db_field, $db_condition = 1) {
+  $sql    = "SELECT $db_field FROM $db_table WHERE $db_condition";
   $result = mysql_query($sql) or die('ERROR_SELECT_DATA_FROM_DB');
-  $num_rows = mysql_num_rows($result);
-  $value[0] = $num_rows;
-  for ($i=1; $i<=$num_rows; $i++) {
-    $value[$i] = mysql_fetch_assoc($result);
+  $array  = array();
+  while ($value = mysql_fetch_assoc($result)) {
+    $array[] = $value;
   }
-  return $value;
+  return $array;
 }
 
 function db_select_row($db_table, $db_field, $db_condition) {

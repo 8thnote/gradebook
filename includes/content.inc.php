@@ -3,7 +3,7 @@
 function get_menu() {
   $menu_items = array(
     l('Front', ''),
-    l('Gradebook', 'gradebook'),
+    l('Gradebook', 'faculties'),
     l('Authorization', 'authorization'),
   );
   return tag('div', item_list($menu_items), array('id' => array('menu')));

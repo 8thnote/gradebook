@@ -9,26 +9,37 @@ function front_page_info() {
   );
 }
 
+function front_page_access() {
+  return TRUE;
+}
+
 function front_page_title() {
   return 'Frontpage';
 }
 
 function front_page_content() {
   $table = array(
-    'caption'    => 'table_test',
-    'header'     => array(
+    'caption' => 'table_test',
+    'header' => array(
       array('data' => 1),
-      array('data' => 1),
+      array('data' => 2),
       array('data' => 3),
     ),
-    'rows'       => array(),
-    'attributes' => array('id' => 'foo'),
+    'rows' => array(
+      array(
+        array('data' => 5),
+        array('data' => 6),
+        array('data' => 7),
+      ),
+      array(
+        array('data' => 7),
+        array('data' => 8),
+        array('data' => 9),
+      ),
+    ),
+    'attributes' => array('border' => 1),
   );
   return table($table);
-}
-
-function front_page_access() {
-  return TRUE;
 }
 
 ?>

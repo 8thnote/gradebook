@@ -38,16 +38,24 @@ function table($vars) {
     $output .= tag('caption', $vars['caption']);
   }
   if (!empty($vars['header'])) {
-    $header = '';
+    $header_output = '';
     foreach ($vars['header'] as $header_cell) {
       $data       = !empty($header_cell['data']) ? $header_cell['data'] : '';
       $attributes = !empty($header_cell['attributes']) ? $header_cell['attributes'] : array();
-      $header .= tag('th', $data, $attributes);
+      $header_output .= tag('th', $data, $attributes);
     }
-    $output .= tag('tr', $header);
+    $output .= tag('tr', $header_output);
   }
   if (!empty($vars['rows'])) {
-   
+    foreach ($vars['rows'] as $row) {
+      $row_output = '';
+      foreach ($row as $cell) {
+        $data       = !empty($cell['data']) ? $cell['data'] : '';
+        $attributes = !empty($cell['attributes']) ? $cell['attributes'] : array();
+        $row_output .= tag('td', $data, $attributes);
+      }
+      $output .= tag('tr', $row_output);
+    }
   }
   return !empty($vars['attributes']) ? tag('table', $output, $vars['attributes']) : tag('table', $output);
 }
