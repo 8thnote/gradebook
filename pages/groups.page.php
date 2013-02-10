@@ -30,7 +30,7 @@ function groups_page_content($args) {
   );
   foreach ($groups as $group) {
     $table['rows'][] = array(
-      array('data' => l($group['name'], 'subject/' . $group['id'])),
+      array('data' => l($group['name'], 'subjects/' . $group['id'])),
     );
   }
   return table($table);
