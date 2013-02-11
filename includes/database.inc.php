@@ -4,6 +4,7 @@ function db_connect() {
   $settings = parse_ini_file('settings/settings.ini', TRUE);
   mysql_connect($settings['db_host'], $settings['db_user'], $settings['db_pass']) or die('ERROR_CONNECT_TO_MYSQL');
   mysql_select_db($settings['db_name']) or die('ERROR_SELECT_DB');
+  mysql_query('SET NAMES utf8');
   return TRUE;
 }
 
