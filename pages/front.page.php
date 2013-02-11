@@ -18,28 +18,7 @@ function front_page_title() {
 }
 
 function front_page_content() {
-  $table = array(
-    'caption' => 'table_test',
-    'header' => array(
-      array('data' => 1),
-      array('data' => 2),
-      array('data' => 3),
-    ),
-    'rows' => array(
-      array(
-        array('data' => 5),
-        array('data' => 6),
-        array('data' => 7),
-      ),
-      array(
-        array('data' => 7),
-        array('data' => 8),
-        array('data' => 9),
-      ),
-    ),
-    'attributes' => array('border' => 1),
-  );
-  return table($table);
+  return tag('h3', 'Hello World!!!');
 }
 
 ?>

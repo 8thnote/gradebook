@@ -50,7 +50,7 @@ function table($vars) {
     foreach ($vars['rows'] as $row) {
       $row_output = '';
       foreach ($row as $cell) {
-        $data       = !empty($cell['data']) ? $cell['data'] : '';
+        $data       = isset($cell['data']) ? $cell['data'] : '';
         $attributes = !empty($cell['attributes']) ? $cell['attributes'] : array();
         $row_output .= tag('td', $data, $attributes);
       }

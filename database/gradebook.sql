@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 3.4.10.1deb1
+-- version 3.5.5
 -- http://www.phpmyadmin.net
 --
--- Хост: localhost
--- Время создания: Фев 11 2013 г., 17:59
--- Версия сервера: 5.5.29
--- Версия PHP: 5.3.10-1ubuntu3
+-- Хост: 127.0.0.1:3306
+-- Время создания: Фев 12 2013 г., 00:51
+-- Версия сервера: 5.1.67-community-log
+-- Версия PHP: 5.2.17
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -98,7 +98,7 @@ INSERT INTO `marks` (`id`, `value`, `record_id`, `student_id`, `subject_id`, `au
 
 CREATE TABLE IF NOT EXISTS `records` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Record ID',
-  `type` varchar(64) NOT NULL COMMENT 'Record Type',
+  `type_id` int(11) NOT NULL COMMENT 'Record Type ID',
   `date` date NOT NULL,
   `group_id` int(11) NOT NULL COMMENT 'Group ID',
   `subject_id` int(11) NOT NULL COMMENT 'Subject ID',
@@ -109,11 +109,11 @@ CREATE TABLE IF NOT EXISTS `records` (
 -- Дамп данных таблицы `records`
 --
 
-INSERT INTO `records` (`id`, `type`, `date`, `group_id`, `subject_id`) VALUES
-(1, 'Л', '2013-02-05', 1, 1),
-(2, 'П', '2013-02-06', 1, 1),
-(3, 'Л', '2013-02-15', 1, 1),
-(4, 'П', '2013-02-04', 1, 1);
+INSERT INTO `records` (`id`, `type_id`, `date`, `group_id`, `subject_id`) VALUES
+(1, 1, '2013-02-05', 1, 1),
+(2, 2, '2013-02-06', 1, 1),
+(3, 3, '2013-02-15', 1, 1),
+(4, 4, '2013-02-04', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -135,8 +135,7 @@ INSERT INTO `record_types` (`id`, `name`) VALUES
 (1, 'lecture'),
 (2, 'practice'),
 (3, 'lab'),
-(4, 'current'),
-(5, 'modular');
+(4, 'module');
 
 -- --------------------------------------------------------
 

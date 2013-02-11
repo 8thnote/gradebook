@@ -1,19 +1,19 @@
 <?php
 
-function gradebook_page_info() {
+function gradebook_edit_page_info() {
   return array(
-    'path'    => 'gradebook/%/%',
-    'title'   => 'gradebook_page_title',
-    'content' => 'gradebook_page_content',
-    'access'  => 'gradebook_page_access',
+    'path'    => 'gradebook/%/%/edit',
+    'title'   => 'gradebook_edit_page_title',
+    'content' => 'gradebook_edit_page_content',
+    'access'  => 'gradebook_edit_page_access',
   );
 }
 
-function gradebook_page_access() {
+function gradebook_edit_page_access() {
   return TRUE;
 }
 
-function gradebook_page_title($args) {
+function gradebook_edit_page_title($args) {
   $group_id   = $args[1];
   $subject_id = $args[2];
   $group_name   = db_select_field("`groups`", "`name`", "`id` = '$group_id'");
@@ -21,7 +21,7 @@ function gradebook_page_title($args) {
   return $subject_name . ' | ' . $group_name;
 }
 
-function gradebook_page_content($args) {
+function gradebook_edit_page_content($args) {
   $group_id   = $args[1];
   $subject_id = $args[2];
   
@@ -42,7 +42,9 @@ function gradebook_page_content($args) {
     $table['header'][$record['id']] = array('data' => t($record_name) . '<hr>' . $record['date']);
     foreach ($students as $student) {
       $mark = db_select_row("`marks`", "*", "`student_id` = '{$student['id']}' AND `subject_id` = '$subject_id' AND `record_id` = '{$record['id']}'");
-      $table['rows'][$student['id']][$record['id']] = array('data' => $mark['value']);
+      $table['rows'][$student['id']][$record['id']] = array(
+        'data' => '<input type="textfield" value="' . $mark['value'] . '" form="gradebook_edit_form">',
+      );
     }
   }
 
@@ -66,11 +68,6 @@ function gradebook_page_content($args) {
     $table['rows'][$student['id']]['current_sum'] = array('data' => $current_sum);
     $table['rows'][$student['id']]['modular_sum'] = array('data' => $modular_sum);
     $table['rows'][$student['id']]['total_sum']   = array('data' => ($current_sum + $modular_sum));
-  }
-  
-  if (TRUE) {
-    $edit_link = l(t('Edit'), "gradebook/$group_id/$subject_id/edit");
-    $table['caption'] .= ' ' . $edit_link;
   }
   
   return table($table);

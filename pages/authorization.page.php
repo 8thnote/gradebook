@@ -26,14 +26,12 @@ function authorization_page_content() {
       ),
       '#data' => array(
         'name'   => array(
-          'type'     => 'textfield',
-          'title'    => t('Name'),
-          'required' => TRUE,
+          'type'  => 'textfield',
+          'title' => t('Name'),
         ),
         'pass'   => array(
-          'type'     => 'password',
-          'title'    => t('Password'),
-          'required' => TRUE,
+          'type'  => 'password',
+          'title' => t('Password'),
         ),
         'submit' => array(
           'type'  => 'submit',

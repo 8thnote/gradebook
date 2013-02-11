@@ -4,6 +4,7 @@
 body {
   margin: 50px auto;
   width: 1280px;
+  word-break: break-all;
 }
 
 div {
@@ -14,11 +15,15 @@ div {
 
 table {
   width: 100%;
-  text-align: left;
 }
 
 caption {
   font: bold 28px serif;
+}
+
+.title {
+  font: bold 18px serif;
+  background-color: #CCCCCC;
 }
 
 #header {
