@@ -6,11 +6,15 @@ function get_menu() {
     l('Gradebook', 'faculties'),
     l('Authorization', 'authorization'),
   );
-  return tag('div', item_list($menu_items), array('id' => array('menu')));
+  return item_list($menu_items);
+}
+
+function get_header() {
+  return tag('h1', t('Gradebook'));
 }
 
 function get_copyright() {
-  return 'Made by RomiOS';
+  return tag('strong' ,t('Made by RomiOS'));
 }
 
 ?>

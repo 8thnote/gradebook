@@ -6,27 +6,35 @@ body {
   width: 1280px;
 }
 
-#header {
+div {
   margin: 10px;
+  padding: 10px;
   box-shadow: 0 0 10px #000000;
+}
+
+table {
+  width: 100%;
+  text-align: left;
+}
+
+caption {
+  font: bold 28px serif;
+}
+
+#header {
+
 }
 
 #breadcrumb {
-  margin: 10px;
-  padding: 10px;
-  box-shadow: 0 0 10px #000000;
+
 }
 
 #content {
-  margin: 10px;
-  padding: 10px;
-  box-shadow: 0 0 10px #000000;
+
 }
 
 #footer {
-  margin: 10px;
-  padding: 10px;
-  box-shadow: 0 0 10px #000000;
+
 }
 
 a.active {

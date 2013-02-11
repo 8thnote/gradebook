@@ -90,6 +90,7 @@ function get_page() {
 function execute() {
   $page = get_page();
   $vars = array(
+    'header'    => get_header(),
     'menu'      => get_menu(),
     'message'   => get_message(),
     'copyright' => get_copyright(),

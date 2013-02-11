@@ -8,7 +8,8 @@
 </head>
 <body>
   <div id="container">
-    <div id="header"><?php print $menu; ?></div>
+    <div id="header"><?php print $header; ?></div>
+    <div id="menu"><?php print $menu; ?></div>
     <?php if ($breadcrumb) { ?>
       <div id="breadcrumb"><?php print $breadcrumb; ?></div>
     <?php } ?>

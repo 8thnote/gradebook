@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 3.5.5
+-- version 3.4.10.1deb1
 -- http://www.phpmyadmin.net
 --
--- Хост: 127.0.0.1:3306
--- Время создания: Фев 10 2013 г., 22:49
--- Версия сервера: 5.1.67-community-log
--- Версия PHP: 5.2.17
+-- Хост: localhost
+-- Время создания: Фев 11 2013 г., 17:59
+-- Версия сервера: 5.5.29
+-- Версия PHP: 5.3.10-1ubuntu3
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -72,25 +72,71 @@ INSERT INTO `groups` (`id`, `name`, `faculty_id`, `info`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `marks` (
-  `type` varchar(64) NOT NULL COMMENT 'Mark Type',
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Mark ID',
   `value` varchar(64) NOT NULL COMMENT 'Mark Value',
+  `record_id` int(11) NOT NULL COMMENT 'Record ID',
   `student_id` int(11) NOT NULL COMMENT 'Student ID',
-  `subject_id` int(11) NOT NULL COMMENT 'Subject ID'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `subject_id` int(11) NOT NULL COMMENT 'Subject ID',
+  `author_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+
+--
+-- Дамп данных таблицы `marks`
+--
+
+INSERT INTO `marks` (`id`, `value`, `record_id`, `student_id`, `subject_id`, `author_id`) VALUES
+(1, 'Н', 2, 1, 1, 2),
+(2, '5', 3, 2, 1, 2),
+(3, '3', 4, 1, 1, 1);
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `pages`
+-- Структура таблицы `records`
 --
 
-CREATE TABLE IF NOT EXISTS `pages` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Page ID',
-  `title` varchar(255) NOT NULL COMMENT 'Page Title',
-  `path` varchar(255) NOT NULL COMMENT 'Page Path',
-  `alias` varchar(255) NOT NULL COMMENT 'Page Alias',
+CREATE TABLE IF NOT EXISTS `records` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Record ID',
+  `type` varchar(64) NOT NULL COMMENT 'Record Type',
+  `date` date NOT NULL,
+  `group_id` int(11) NOT NULL COMMENT 'Group ID',
+  `subject_id` int(11) NOT NULL COMMENT 'Subject ID',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Table for pages data' AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+
+--
+-- Дамп данных таблицы `records`
+--
+
+INSERT INTO `records` (`id`, `type`, `date`, `group_id`, `subject_id`) VALUES
+(1, 'Л', '2013-02-05', 1, 1),
+(2, 'П', '2013-02-06', 1, 1),
+(3, 'Л', '2013-02-15', 1, 1),
+(4, 'П', '2013-02-04', 1, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `record_types`
+--
+
+CREATE TABLE IF NOT EXISTS `record_types` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Record Type ID',
+  `name` varchar(64) NOT NULL COMMENT 'Record Type Name',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+
+--
+-- Дамп данных таблицы `record_types`
+--
+
+INSERT INTO `record_types` (`id`, `name`) VALUES
+(1, 'lecture'),
+(2, 'practice'),
+(3, 'lab'),
+(4, 'current'),
+(5, 'modular');
 
 -- --------------------------------------------------------
 
@@ -103,7 +149,17 @@ CREATE TABLE IF NOT EXISTS `students` (
   `name` varchar(255) NOT NULL COMMENT 'Student Name',
   `group_id` int(11) NOT NULL COMMENT 'Group ID',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+
+--
+-- Дамп данных таблицы `students`
+--
+
+INSERT INTO `students` (`id`, `name`, `group_id`) VALUES
+(1, 'Саша', 1),
+(2, 'Пєтя', 1),
+(3, 'Андрій', 2),
+(4, 'Вася', 2);
 
 -- --------------------------------------------------------
 
@@ -126,19 +182,6 @@ INSERT INTO `subjects` (`id`, `name`) VALUES
 (2, 'Українська мова'),
 (3, 'Фізика'),
 (4, 'Програмування');
-
--- --------------------------------------------------------
-
---
--- Структура таблицы `teachers`
---
-
-CREATE TABLE IF NOT EXISTS `teachers` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Teacher ID',
-  `name` varchar(255) NOT NULL COMMENT 'Teacher Name',
-  `status` varchar(255) NOT NULL COMMENT 'Teacher Status',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 

@@ -37,7 +37,7 @@ function subjects_page_content($args) {
       $teachers_name[] = db_select_field("`users`", "`name`", "`id` = '$teacher_id'");
     }
     $table['rows'][] = array(
-      array('data' => l($subject_name, 'gradebook/' . $subject_id)),
+      array('data' => l($subject_name, "gradebook/$group_id/$subject_id")),
       array('data' => implode(', ', $teachers_name)),
     );
   }
