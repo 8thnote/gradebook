@@ -60,17 +60,10 @@ function table($vars) {
   return !empty($vars['attributes']) ? tag('table', $output, $vars['attributes']) : tag('table', $output);
 }
 
-function form($form) {
-  $output     = ''; 
-  $attributes = array(
-    'id'             => $form['#info']['id'],
-    'method'         => 'post',
-    'action'         => url(get_path()),
-    'accept-charset' => 'UTF-8',
-  );
-  $output .= '<form' . tag_attributes($attributes) . '>';
-  $output .= '<input' . tag_attributes(array('name'=> 'form_id', 'type' => 'hidden', 'value' => $form['#info']['id'])) . '>';
-  foreach ($form['#data'] as $element_name => $form_element) {
+function form($form_id, $vars = array()) {
+  $output = '<input' . tag_attributes(array('name'=> 'form_id', 'type' => 'hidden', 'value' => $form_id)) . '>';
+  $form   = function_exists($form_id) ? $form_id($vars) : array();
+  foreach ($form as $element_name => $form_element) {
     if (is_array($form_element) && !empty($form_element['type'])) {
       $buil_element = '';
       if (!empty($form_element['title'])) {
@@ -115,11 +108,13 @@ function form($form) {
       $output .= tag('div', $buil_element, array('class' => array($element_name)));
     }
   }
-  $output .= '</form>';
-  if (isset($_POST['form_id']) && ($_POST['form_id'] == $form['#info']['id'])) {
-    $submit_callback = $form['#info']['submit'];
-    if ($submit_callback($_POST)) {
-      header('Location: ' . url(get_path()));
+  $output = tag('form', $output, array('id' => $form_id, 'method' => 'post', 'action' => url(get_path()), 'accept-charset' => 'UTF-8'));
+  if (isset($_POST['form_id']) && ($_POST['form_id'] == $form_id)) {
+    $submit_callback = $form_id . '_submit';
+    if (function_exists($submit_callback)) {
+      if ($submit_callback($_POST)) {
+        header('Location: ' . url(get_path()));
+      }
     }
   }
   return $output;

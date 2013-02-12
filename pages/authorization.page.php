@@ -18,46 +18,28 @@ function authorization_page_title() {
 }
 
 function authorization_page_content() {
-  if (empty($_SESSION['user'])) {
-    $form = array(
-      '#info'  => array(
-        'id'     => 'authorization_login_form',
-        'submit' => 'authorization_login_submit',
-      ),
-      '#data' => array(
-        'name'   => array(
-          'type'  => 'textfield',
-          'title' => t('Name'),
-        ),
-        'pass'   => array(
-          'type'  => 'password',
-          'title' => t('Password'),
-        ),
-        'submit' => array(
-          'type'  => 'submit',
-          'value' => t('Submit'),
-        ),
-      ),
-    );
-  }
-  else {
-    $form = array(
-      '#info'  => array(
-        'id'     => 'authorization_logout_form',
-        'submit' => 'authorization_logout_submit',
-      ),
-      '#data' => array(
-        'submit' => array(
-          'type'  => 'submit',
-          'value' => t('Exit'),
-        ),
-      ),
-    );
-  }
-  return form($form);
+  $form_id = empty($_SESSION['user']) ? 'authorization_login_form' : 'authorization_logout_form';
+  return form($form_id);
 }
 
-function authorization_login_submit($values) {
+function authorization_login_form() {
+  $form = array();
+  $form['name'] = array(
+    'type'  => 'textfield',
+    'title' => t('Name'),
+  );
+  $form['pass'] = array(
+    'type'  => 'password',
+    'title' => t('Password'),
+  );
+  $form['submit'] = array(
+    'type'  => 'submit',
+    'value' => t('Submit'),
+  );
+  return $form;
+}
+
+function authorization_login_form_submit($values) {
   $name = clear($values['name']);
   $pass = clear($values['pass']);
   if (empty($name) || empty($pass)) {
@@ -78,7 +60,16 @@ function authorization_login_submit($values) {
   }
 }
 
-function authorization_logout_submit($values) {
+function authorization_logout_form() {
+  $form = array();
+  $form['submit'] = array(
+    'type'  => 'submit',
+    'value' => t('Exit'),
+  );
+  return $form;
+}
+
+function authorization_logout_form_submit($values) {
   $_SESSION['user'] = array();
   alert(t('Exit success.'));
   return TRUE;

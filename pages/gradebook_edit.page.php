@@ -38,12 +38,11 @@ function gradebook_edit_page_content($args) {
     $table['rows'][$student['id']]['title'] = array('data' => $student['name']);
   }
   foreach ($records as $record) {
-    $record_name = db_select_field("`record_types`", "`name`", "`id` = '{$record['type_id']}'");
-    $table['header'][$record['id']] = array('data' => t($record_name) . '<hr>' . $record['date']);
+    $table['header'][$record['id']] = form('gradebook_edit_form', array('type' => 'record', 'record' => $record));
     foreach ($students as $student) {
       $mark = db_select_row("`marks`", "*", "`student_id` = '{$student['id']}' AND `subject_id` = '$subject_id' AND `record_id` = '{$record['id']}'");
       $table['rows'][$student['id']][$record['id']] = array(
-        'data' => '<input type="textfield" value="' . $mark['value'] . '" form="gradebook_edit_form">',
+        'data' => form('gradebook_edit_form', array('type' => 'mark', 'mark' => $mark)),
       );
     }
   }
@@ -71,6 +70,37 @@ function gradebook_edit_page_content($args) {
   }
   
   return table($table);
+}
+
+function gradebook_edit_form($vars) {
+  $form = array();
+  switch ($vars['type']) {
+    case 'mark':
+      $form['mark_' . $vars['mark']['id']] = array(
+        'type'  => 'textfield',
+        'value' => $vars['mark']['value'],
+      );
+      break;
+    
+    case 'record':
+      $record_types   = db_select_array("`record_types`", "*");
+      $record_options = array();
+      foreach ($record_types as $record_type) {
+        $record_options[$record_type['id']] = $record_type['name'];
+      }
+      $form['record_type_' . $vars['record']['id']] = array(
+        'type'    => 'select',
+        'options' => $record_options,
+        'value'   => $vars['record']['type_id'],
+      );
+      $form['record_date_' . $vars['record']['id']] = array(
+        'type'    => 'textfield',
+        'value'   => $vars['record']['date'],
+      );
+      break;
+    
+  }
+  return $form;
 }
 
 ?>
