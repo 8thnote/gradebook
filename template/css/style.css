@@ -7,39 +7,35 @@ body {
   word-break: break-all;
 }
 
-div {
+div #header, #menu, #breadcrumb, #content, #footer {
   margin: 10px;
   padding: 10px;
   box-shadow: 0 0 10px #000000;
-}
-
-table {
-  width: 100%;
 }
 
 caption {
   font: bold 28px serif;
 }
 
-.title {
-  font: bold 18px serif;
-  background-color: #CCCCCC;
+table.gradebook {
+  margin: 10px;
+  text-align: left;
+  border-spacing: 0;
+  border: 1px solid #000000;
+  box-shadow: 0 0 10px #000000;
 }
 
-#header {
-
+table.gradebook th, td, hr {
+  border: 1px solid #C8C8C8;
 }
 
-#breadcrumb {
-
+table.gradebook input, select {
+  border-width: 0;
+  display: block;
 }
 
-#content {
-
-}
-
-#footer {
-
+table.gradebook select {
+  width: 100%;
 }
 
 a.active {

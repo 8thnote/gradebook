@@ -30,10 +30,12 @@ function gradebook_page_content($args) {
   $records  = db_select_array("`records`", "*", "`group_id` = '$group_id' AND `subject_id` = '$subject_id'");
   $students = db_select_array("`students`", "*", "`group_id` = '$group_id'");
   
-  $table = array();
-  $table['attributes'] = array('border' => 1);
-  $table['caption'] = $subject_name . ' | ' . $group_name;
-  $table['header']['title'] = array('data' => t('Student name'));
+  $table = array(
+    'caption'    => $subject_name . ' | ' . $group_name,
+    'attributes' => array('class' => 'gradebook'),
+  );
+  
+  $table['header']['students'] = array('data' => t('Students'));
   foreach ($students as $student) {
     $table['rows'][$student['id']]['title'] = array('data' => $student['name']);
   }
@@ -67,13 +69,8 @@ function gradebook_page_content($args) {
     $table['rows'][$student['id']]['modular_sum'] = array('data' => $modular_sum);
     $table['rows'][$student['id']]['total_sum']   = array('data' => ($current_sum + $modular_sum));
   }
-  
-  if (TRUE) {
-    $edit_link = l(t('Edit'), "gradebook/$group_id/$subject_id/edit");
-    $table['caption'] .= ' ' . $edit_link;
-  }
-  
-  return table($table);
+    
+  return table($table) . tag('div', l(t('Edit'), "gradebook/$group_id/$subject_id/edit"), array('class' => array('gradebook-actions')));
 }
 
 ?>
