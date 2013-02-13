@@ -44,7 +44,7 @@ function gradebook_edit_page_content($args) {
   foreach ($records as $record) {
     $record_options = '';
     foreach ($record_types as $record_type) {
-      $attributes = ($record_type['id'] == $record['id'])  ? array('value' => $record_type['id'], 'selected' => 'selected') : array('value' => $record_type['id']);
+      $attributes = ($record_type['id'] == $record['type_id'])  ? array('value' => $record_type['id'], 'selected' => 'selected') : array('value' => $record['type_id']);
       $record_options .= tag('option', $record_type['name'], $attributes);
     }
     $record_type_select = tag('select', $record_options, array('name'=> 'record_type_' . $record['id'], 'form' => 'gradebook_edit_form'));
@@ -124,7 +124,7 @@ function gradebook_edit_form_submit($values) {
     }
   }
   foreach ($records as $record_id => $record_values) {
-    
+    db_update("`records`", "`date` = '{$record_values['date']}'", "`id` = '$record_id'");
   }
   foreach ($marks as $record_id => $students) {
     
