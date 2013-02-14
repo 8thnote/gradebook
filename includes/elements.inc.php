@@ -79,8 +79,20 @@ function form($form_id, $vars = array()) {
         $value = '';
       }
       switch ($form_element['type']) {
+        case 'hidden':
+          $buil_element .= '<input' . tag_attributes(array('name'=> $element_name, 'type' => 'hidden', 'value' => $form_element['value'])) . '>';
+          break;
+        
         case 'textfield':
           $buil_element .= '<input' . tag_attributes(array('name'=> $element_name, 'type' => 'textfield', 'value' => $value)) . '>';
+          break;
+        
+        case 'password':
+          $buil_element .= '<input' . tag_attributes(array('name'=> $element_name, 'type' => 'password')) . '>';
+          break;
+        
+        case 'submit':
+          $buil_element .= '<input' . tag_attributes(array('name'=> $element_name, 'type' => 'submit', 'value' => $form_element['value'])) . '>';
           break;
         
         case 'textarea':
@@ -94,14 +106,6 @@ function form($form_id, $vars = array()) {
             $options   .= tag('option', $option_value, $attributes);
           }
           $buil_element .= tag('select', $options, array('name'=> $element_name));
-          break;
-        
-        case 'password':
-          $buil_element .= '<input' . tag_attributes(array('name'=> $element_name, 'type' => 'password')) . '>';
-          break;
-        
-        case 'submit':
-          $buil_element .= '<input' . tag_attributes(array('name'=> $element_name, 'type' => 'submit', 'value' => $form_element['value'])) . '>';
           break;
         
       }

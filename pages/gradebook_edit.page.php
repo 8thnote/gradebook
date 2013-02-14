@@ -28,7 +28,7 @@ function gradebook_edit_page_content($args) {
   $group_name   = db_select_field("`groups`", "`name`", "`id` = '$group_id'");
   $subject_name = db_select_field("`subjects`", "`name`", "`id` = '$subject_id'");
   $record_types = db_select_array("`record_types`", "*");
-  $records  = db_select_array("`records`", "*", "`group_id` = '$group_id' AND `subject_id` = '$subject_id'");
+  $records  = db_select_array("`records`", "*", "`group_id` = '$group_id' AND `subject_id` = '$subject_id'", "`date`");
   $students = db_select_array("`students`", "*", "`group_id` = '$group_id'");
   
   $table = array(
@@ -44,7 +44,7 @@ function gradebook_edit_page_content($args) {
   foreach ($records as $record) {
     $record_options = '';
     foreach ($record_types as $record_type) {
-      $attributes = ($record_type['id'] == $record['type_id'])  ? array('value' => $record_type['id'], 'selected' => 'selected') : array('value' => $record['type_id']);
+      $attributes = ($record_type['id'] == $record['type_id'])  ? array('value' => $record_type['id'], 'selected' => 'selected') : array('value' => $record_type['id']);
       $record_options .= tag('option', $record_type['name'], $attributes);
     }
     $record_type_select = tag('select', $record_options, array('name'=> 'record_type_' . $record['id'], 'form' => 'gradebook_edit_form'));
@@ -92,21 +92,36 @@ function gradebook_edit_page_content($args) {
     $table['rows'][$student['id']]['total_sum']   = array('data' => ($current_sum + $modular_sum));
   }
   
-  return table($table) . tag('div', form('gradebook_edit_form'), array('class' => array('gradebook-actions')));
+  return table($table) . tag('div', form('gradebook_edit_form', array('subject_id' => $subject_id, 'group_id' => $group_id)), array('class' => array('gradebook-actions')));
 }
 
-function gradebook_edit_form() {
-  $form = array(); 
+function gradebook_edit_form($vars) {
+  $form = array();
+  $form['subject_id'] = array(
+    'type'  => 'hidden',
+    'value' => $vars['subject_id'],
+  );
+  $form['group_id'] = array(
+    'type'  => 'hidden',
+    'value' => $vars['group_id'],
+  );
   $form['submit'] = array(
     'type'  => 'submit',
-    'value' => t('Submit'),
+    'value' => t('Save'),
   );
   return $form;
 }
 
 function gradebook_edit_form_submit($values) {
+
+  $author_id  = 1; //Ne zavtukatu
+  $group_id   = $values['group_id'];
+  $subject_id = $values['subject_id'];
+  
+  $results = array();
   $records = array();
   $marks   = array();
+  
   foreach ($values as $key => $value) {
     $key_parse = explode('_', $key);
     switch ($key_parse[0]) {
@@ -119,16 +134,38 @@ function gradebook_edit_form_submit($values) {
       case 'mark':
         $record_id  = $key_parse[1];
         $student_id = $key_parse[2];
-        $marks[$record_id][$student_id] = $value;
+        $marks[$record_id][$student_id] = clear($value);
         break;
     }
   }
+  
   foreach ($records as $record_id => $record_values) {
-    db_update("`records`", "`date` = '{$record_values['date']}'", "`id` = '$record_id'");
+    $results[] = db_update("`records`", "`date` = '{$record_values['date']}', `type_id` = '{$record_values['type']}'", "`id` = '$record_id'");
   }
+  
   foreach ($marks as $record_id => $students) {
-    
+    foreach ($students as $student_id => $mark_value) {
+      $exist_mark = db_select_row("`marks`", "*", "`record_id` = '$record_id' AND `student_id` = '$student_id'");
+      if (($mark_value !== '') && !empty($exist_mark)) {
+        $results[] = db_update("`marks`", "`value` = '$mark_value', `author_id` = '$author_id'", "`record_id` = '$record_id' AND `student_id` = '$student_id' AND `subject_id` = '$subject_id'");
+      }
+      elseif (($mark_value !== '') && empty($exist_mark)) {
+        $results[] = db_insert("`marks`", "value, record_id, student_id, subject_id, author_id", "'$mark_value', '$record_id', '$student_id', '$subject_id', '$author_id'");
+      }
+      elseif (($mark_value === '') && !empty($exist_mark)) {
+        $results[] = db_delete("`marks`", "`record_id` = '$record_id' AND `student_id` = '$student_id' AND `subject_id` = '$subject_id'");
+      }
+    }
   }
+  
+  if (in_array(TRUE, $results) && !in_array(FALSE, $results)) {
+    alert(t('Gradebook saved.'));
+    return TRUE;
+  }
+  else {
+    alert(t('Saving filed.'), 'error');
+    return FALSE;
+  }
+  
 }
-
 ?>

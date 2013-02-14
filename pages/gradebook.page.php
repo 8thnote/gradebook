@@ -27,7 +27,7 @@ function gradebook_page_content($args) {
   
   $group_name   = db_select_field("`groups`", "`name`", "`id` = '$group_id'");
   $subject_name = db_select_field("`subjects`", "`name`", "`id` = '$subject_id'");
-  $records  = db_select_array("`records`", "*", "`group_id` = '$group_id' AND `subject_id` = '$subject_id'");
+  $records  = db_select_array("`records`", "*", "`group_id` = '$group_id' AND `subject_id` = '$subject_id'", "`date`");
   $students = db_select_array("`students`", "*", "`group_id` = '$group_id'");
   
   $table = array(

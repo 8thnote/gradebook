@@ -8,8 +8,8 @@ function db_connect() {
   return TRUE;
 }
 
-function db_select_array($db_table, $db_field, $db_condition = 1) {
-  $sql    = "SELECT $db_field FROM $db_table WHERE $db_condition";
+function db_select_array($db_table, $db_field, $db_condition = 1, $db_order_by = 1) {
+  $sql    = "SELECT $db_field FROM $db_table WHERE $db_condition ORDER BY $db_order_by";
   $result = mysql_query($sql) or die('ERROR_SELECT_DATA_FROM_DB');
   $array  = array();
   while ($value = mysql_fetch_assoc($result)) {
