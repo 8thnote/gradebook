@@ -2,8 +2,8 @@
  * Style.css
  */
 body {
-  margin: 50px auto;
-  width: 1280px;
+  margin: 20px auto;
+  /*width: 1280px;*/
   word-break: break-all;
   font-family: serif;
 }
@@ -25,9 +25,12 @@ ul {
   padding: 0;
 }
 
-table.gradebook {
-  margin: 10px;
+table {
+  width: 100%;
   text-align: left;
+}
+
+table.gradebook {
   border-spacing: 0;
   border: 1px solid #000000;
   box-shadow: 0 0 10px #000000;
@@ -35,7 +38,7 @@ table.gradebook {
 
 table.gradebook th, td {
   padding: 5px;
-  border: 1px solid #C8C8C8;
+  border: 1px solid #808080;
 }
 
 table.gradebook td.title, th {
@@ -43,7 +46,6 @@ table.gradebook td.title, th {
 }
 
 table.gradebook input, select {
-  border-width: 0;
   display: block;
 }
 
@@ -113,4 +115,8 @@ a.button:active, input[type="submit"]:active {
 
 #message p.error{
   box-shadow: 0 0 10px #FF0000;
+}
+
+#content {
+  padding: 10px;
 }

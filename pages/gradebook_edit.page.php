@@ -10,7 +10,7 @@ function gradebook_edit_page_info() {
 }
 
 function gradebook_edit_page_access() {
-  return TRUE;
+  return user_role('admin') || user_role('teacher');
 }
 
 function gradebook_edit_page_title($args) {
@@ -147,6 +147,6 @@ function gradebook_edit_form_submit($values) {
     alert(t('Saving filed.'), 'error');
     return FALSE;
   }
-  
 }
+
 ?>

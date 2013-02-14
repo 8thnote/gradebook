@@ -78,6 +78,10 @@ function form($form_id, $vars = array()) {
         $value = '';
       }
       switch ($form_element['type']) {
+        case 'markup':
+          $buil_element .= $value;
+          break;
+        
         case 'hidden':
           $buil_element .= '<input' . tag_attributes(array('name'=> $element_name, 'type' => 'hidden', 'value' => $form_element['value'])) . '>';
           break;

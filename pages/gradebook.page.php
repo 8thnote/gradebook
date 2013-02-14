@@ -74,12 +74,16 @@ function gradebook_page_content($args) {
     $table['rows'][$student['id']]['total_sum']   = array('data' => ($current_sum + $modular_sum));
   }
   
-  $actions = array(
-    l(t('Edit'), "gradebook/$group_id/$subject_id/edit", array('class' => array('button'))),
-    l(t('Add'), "gradebook/$group_id/$subject_id/add", array('class' => array('button'))),
-  );
-  
-  return table($table) . item_list($actions, array('class' => array('gradebook-actions')));
+  if (user_role('admin') || user_role('teacher')) {
+    $actions = array(
+      l(t('Edit'), "gradebook/$group_id/$subject_id/edit", array('class' => array('button'))),
+      l(t('Add'), "gradebook/$group_id/$subject_id/add", array('class' => array('button'))),
+    );
+    return table($table) . item_list($actions, array('class' => array('gradebook-actions')));
+  }
+  else {
+    return table($table);
+  }
 }
 
 ?>

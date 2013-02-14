@@ -123,6 +123,10 @@ function alert($message, $type = 'status') {
   $_SESSION['message'][$type][] = $message;
 }
 
+function user_role($role) {
+  return !empty($_SESSION['user']) && $_SESSION['user']['role'] === $role;
+}
+
 function get_message() {
   $output = array();
   if (!empty($_SESSION['message'])) {

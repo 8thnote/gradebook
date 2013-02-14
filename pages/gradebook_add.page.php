@@ -10,7 +10,7 @@ function gradebook_add_page_info() {
 }
 
 function gradebook_add_page_access() {
-  return TRUE;
+  return user_role('admin') || user_role('teacher');
 }
 
 function gradebook_add_page_title($args) {
@@ -70,4 +70,5 @@ function gradebook_add_form_submit($values) {
     return FALSE;
   }
 }
+
 ?>

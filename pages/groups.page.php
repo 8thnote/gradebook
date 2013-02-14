@@ -20,19 +20,34 @@ function groups_page_title($args) {
 
 function groups_page_content($args) {
   $faculty_id = $args[1];
-  $faculty = db_select_field("`faculties`", "`name`", "`id` = '$faculty_id'");
-  $groups = db_select_array("`groups`", "*", "`faculty_id` = '$faculty_id'");
-  $table = array();
-  $table['attributes'] = array('border' => 1);
-  $table['caption'] = $faculty;
-  $table['header'] = array(
-    array('data' => t('Group name')),
+  $faculty    = db_select_field("`faculties`", "`name`", "`id` = '$faculty_id'");
+  $groups     = db_select_array("`groups`", "*", "`faculty_id` = '$faculty_id'");
+  
+  $table = array(
+    'caption'    => $faculty,
+    'attributes' => array('class' => array('groups-view')),
   );
+  
+  $table['header']['title'] = array('data' => t('Group name'));
   foreach ($groups as $group) {
-    $table['rows'][] = array(
-      array('data' => l($group['name'], 'subjects/' . $group['id'])),
+    $table['rows'][$group['id']]['group'] = array(
+      'data' => l($group['name'], 'subjects/' . $group['id']),
     );
   }
+  
+  if (user_role('admin')) {
+    $table['header']['actions'] = array('data' => t('Actions'));
+    foreach ($groups as $group) {
+      $actions = array(
+        l(t('Edit'), "group/{$group['id']}/edit", array('class' => array('button'))),
+        l(t('Delete'), "group/{$group['id']}/delete", array('class' => array('button'))),
+      );
+      $table['rows'][$group['id']]['actions'] = array(
+        'data' => item_list($actions, array('class' => array('actions'))),
+      );
+    }
+  }
+  
   return table($table);
 }
 
