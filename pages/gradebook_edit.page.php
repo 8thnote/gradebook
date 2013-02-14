@@ -33,12 +33,15 @@ function gradebook_edit_page_content($args) {
   
   $table = array(
     'caption'    => $subject_name . ' | ' . $group_name,
-    'attributes' => array('class' => 'gradebook'),
+    'attributes' => array('class' => array('gradebook', 'gradebook-edit')),
   );
 
   $table['header']['students'] = array('data' => t('Students'));
   foreach ($students as $student) {
-    $table['rows'][$student['id']]['title'] = array('data' => $student['name']);
+    $table['rows'][$student['id']]['title'] = array(
+      'data'       => $student['name'],
+      'attributes' => array('class' => 'title'),
+    );
   }
   
   foreach ($records as $record) {
@@ -69,30 +72,8 @@ function gradebook_edit_page_content($args) {
       $table['rows'][$student['id']][$record['id']] = array('data' => $mark_input);
     }
   }
-
-  $table['header']['current_sum'] = array('data' => t('Current Sum'));
-  $table['header']['modular_sum'] = array('data' => t('Modular Sum'));
-  $table['header']['total_sum']   = array('data' => t('Total Sum'));
-  foreach ($students as $student) {
-    $marks = db_select_array("`marks`", "*", "`student_id` = '{$student['id']}' AND `subject_id` = '$subject_id'");
-    $current_sum = 0;
-    $modular_sum = 0;
-    foreach ($marks as $mark) {
-      $value = is_numeric($mark['value']) ? $mark['value'] : 0;
-      $record_type = db_select_field("`records`", "`type_id`", "`id` = '{$mark['record_id']}'");
-      if ($record_type == 4) {
-        $modular_sum += $value;
-      }
-      else {
-        $current_sum += $value;
-      }
-    }
-    $table['rows'][$student['id']]['current_sum'] = array('data' => $current_sum);
-    $table['rows'][$student['id']]['modular_sum'] = array('data' => $modular_sum);
-    $table['rows'][$student['id']]['total_sum']   = array('data' => ($current_sum + $modular_sum));
-  }
   
-  return table($table) . tag('div', form('gradebook_edit_form', array('subject_id' => $subject_id, 'group_id' => $group_id)), array('class' => array('gradebook-actions')));
+  return table($table) . form('gradebook_edit_form', array('subject_id' => $subject_id, 'group_id' => $group_id));
 }
 
 function gradebook_edit_form($vars) {
@@ -160,7 +141,7 @@ function gradebook_edit_form_submit($values) {
   
   if (in_array(TRUE, $results) && !in_array(FALSE, $results)) {
     alert(t('Gradebook saved.'));
-    return TRUE;
+    return "gradebook/$group_id/$subject_id";
   }
   else {
     alert(t('Saving filed.'), 'error');

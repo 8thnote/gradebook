@@ -32,16 +32,20 @@ function gradebook_page_content($args) {
   
   $table = array(
     'caption'    => $subject_name . ' | ' . $group_name,
-    'attributes' => array('class' => 'gradebook'),
+    'attributes' => array('class' => array('gradebook', 'gradebook-view')),
   );
   
   $table['header']['students'] = array('data' => t('Students'));
   foreach ($students as $student) {
-    $table['rows'][$student['id']]['title'] = array('data' => $student['name']);
+    $table['rows'][$student['id']]['title'] = array(
+      'data'       => $student['name'],
+      'attributes' => array('class' => 'title'),
+    );
   }
+  
   foreach ($records as $record) {
     $record_name = db_select_field("`record_types`", "`name`", "`id` = '{$record['type_id']}'");
-    $table['header'][$record['id']] = array('data' => t($record_name) . '<hr>' . $record['date']);
+    $table['header'][$record['id']] = array('data' => t($record_name) . '<hr>' . date('d.m.Y' ,strtotime($record['date'])));
     foreach ($students as $student) {
       $mark = db_select_row("`marks`", "*", "`student_id` = '{$student['id']}' AND `subject_id` = '$subject_id' AND `record_id` = '{$record['id']}'");
       $table['rows'][$student['id']][$record['id']] = array('data' => $mark['value']);
@@ -69,8 +73,13 @@ function gradebook_page_content($args) {
     $table['rows'][$student['id']]['modular_sum'] = array('data' => $modular_sum);
     $table['rows'][$student['id']]['total_sum']   = array('data' => ($current_sum + $modular_sum));
   }
-    
-  return table($table) . tag('div', l(t('Edit'), "gradebook/$group_id/$subject_id/edit"), array('class' => array('gradebook-actions')));
+  
+  $actions = array(
+    l(t('Edit'), "gradebook/$group_id/$subject_id/edit", array('class' => array('button'))),
+    l(t('Add'), "gradebook/$group_id/$subject_id/add", array('class' => array('button'))),
+  );
+  
+  return table($table) . item_list($actions, array('class' => array('gradebook-actions')));
 }
 
 ?>

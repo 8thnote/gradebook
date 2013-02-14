@@ -23,13 +23,12 @@ function l($text, $path, $attributes = array()) {
   return tag('a', $text, $attributes);
 }
 
-function item_list($items, $type = 'ul') {
-  $output = '<' . $type . '>';
+function item_list($items, $attributes = array()) {
+  $output = '';
   foreach ($items as $item) {
-    $output .= '<li>' . $item . '</li>';
+    $output .= tag('li', $item);
   }
-  $output .= '</' . $type . '>';
-  return $output;
+  return tag('ul', $output, $attributes);
 }
 
 function table($vars) {
@@ -87,6 +86,10 @@ function form($form_id, $vars = array()) {
           $buil_element .= '<input' . tag_attributes(array('name'=> $element_name, 'type' => 'textfield', 'value' => $value)) . '>';
           break;
         
+        case 'date':
+          $buil_element .= '<input' . tag_attributes(array('name'=> $element_name, 'type' => 'date', 'value' => $value)) . '>';
+          break;
+        
         case 'password':
           $buil_element .= '<input' . tag_attributes(array('name'=> $element_name, 'type' => 'password')) . '>';
           break;
@@ -116,8 +119,10 @@ function form($form_id, $vars = array()) {
   if (isset($_POST['form_id']) && ($_POST['form_id'] == $form_id)) {
     $submit_callback = $form_id . '_submit';
     if (function_exists($submit_callback)) {
-      if ($submit_callback($_POST)) {
-        header('Location: ' . url(get_path()));
+      $submit_result = $submit_callback($_POST);
+      if ($submit_result !== FALSE) {
+        $redirect_url = is_bool($submit_result) ? url(get_path()) : url($submit_result);
+        header('Location: ' . $redirect_url);
       }
     }
   }
