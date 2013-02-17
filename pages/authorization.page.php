@@ -18,8 +18,43 @@ function authorization_page_title() {
 }
 
 function authorization_page_content() {
-  $form_id = empty($_SESSION['user']) ? 'authorization_login_form' : 'authorization_logout_form';
-  return form($form_id);
+  $user_id = !empty($_SESSION['user']) ? $_SESSION['user']['id'] : 0;
+  
+  $output  = $user_id ? form('authorization_logout_form', array('name' => $_SESSION['user']['name'])) : form('authorization_login_form');
+  
+  if (user_role('admin')) {
+    $nodes = array('faculty', 'group', 'student', 'teacher');
+    $items = array();
+    foreach ($nodes as $node) {
+      $items[] = l(t('Add ' . $node), "$node/add", array('class' => array('button')));
+    }
+    $output .= item_list($items, array('class' => array('admin-menu')));
+  }
+  
+  if (user_role('teacher')) {
+    $groups   = db_select_array('groups', "*");
+    $subjects = array();
+    foreach ($groups as $group) {
+      $group_info = unserialize($group['info']);
+      foreach ($group_info as $subject_id => $teachers) {
+        if (in_array($user_id, $teachers)) {
+          $subjects[$subject_id][] = $group['id'];
+        }
+      }
+    }
+    
+    foreach ($subjects as $subject_id => $groups_id) {
+      $subject_name = db_select_field("`subjects`", "`name`", "`id` = '$subject_id'");
+      $groups = array();
+      foreach ($groups_id as $group_id) {
+        $group_name = db_select_field("`groups`", "`name`", "`id` = '$group_id'");
+        $groups[]   =  l($group_name, "gradebook/$group_id/$subject_id");
+      }
+      $output .= item_list($groups, array('class' => array('my-groups')), $subject_name);
+    }
+    
+  }
+  return $output;
 }
 
 function authorization_login_form() {
@@ -60,8 +95,12 @@ function authorization_login_form_submit($values) {
   }
 }
 
-function authorization_logout_form() {
+function authorization_logout_form($vars) {
   $form = array();
+  $form['name'] = array(
+    'type'   => 'item',
+    'markup' => t('Hello') . ' ' . tag('strong', $vars['name']) . '!',
+  );
   $form['submit'] = array(
     'type'  => 'submit',
     'value' => t('Exit'),

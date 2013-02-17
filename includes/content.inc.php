@@ -2,9 +2,9 @@
 
 function get_menu() {
   $menu_items = array(
-    l('Front', ''),
-    l('Gradebook', 'faculties'),
-    l('Authorization', 'authorization'),
+    l(t('Front'), ''),
+    l(t('Gradebook'), 'faculties'),
+    l(t('Authorization'), 'authorization'),
   );
   return item_list($menu_items);
 }

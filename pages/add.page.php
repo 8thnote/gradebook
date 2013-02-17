@@ -25,6 +25,7 @@ function add_form($vars) {
   $form = array();
   
   switch ($vars['type']) {
+    
     case 'faculty':
       $form['faculty_name'] = array(
         'type'     => 'textfield',
@@ -50,16 +51,50 @@ function add_form($vars) {
         'options' => $options,
       );
       break;
+    
+    case 'student':
+      $form['student_name'] = array(
+        'type'     => 'textfield',
+        'title'    => t('Student name'),
+        'required' => TRUE,
+      );
+      $groups  = db_select_array("`groups`", "*", "1", "name");
+      $options = array();
+      foreach ($groups as $group) {
+        $options[$group['id']] = $group['name'];
+      }
+      $form['group_id'] = array(
+        'type'    => 'select',
+        'title'   => t('Group'),
+        'options' => $options,
+      );
+      break;
+    
+    case 'teacher':
+      $form['teacher_name'] = array(
+        'type'     => 'textfield',
+        'title'    => t('Teacher name'),
+        'required' => TRUE,
+      );
+      $form['teacher_pass'] = array(
+        'type'     => 'textfield',
+        'title'    => t('Password'),
+        'required' => TRUE,
+      );
+      break;
+    
   }
   
   $form['type'] = array(
     'type'  => 'hidden',
     'value' =>  $vars['type'],
   );
-  $form['cancel'] = array(
-    'type'   => 'item',
-    'markup' => l(t('Cancel'), $_SERVER['HTTP_REFERER'], array('class' => array('button'))),
-  );
+  if (!empty($_SERVER['HTTP_REFERER'])) {
+    $form['cancel'] = array(
+      'type'   => 'item',
+      'markup' => l(t('Cancel'), $_SERVER['HTTP_REFERER'], array('class' => array('button'))),
+    );
+  }
   $form['submit'] = array(
     'type'  => 'submit',
     'value' => t('Add'),
@@ -72,6 +107,7 @@ function add_form_submit($values) {
   $redirect = TRUE;
   
   switch ($values['type']) {
+    
     case 'faculty':
       $result   = db_insert("`faculties`", "name", "'{$values['faculty_name']}'");
       $redirect = 'faculties';
@@ -79,8 +115,19 @@ function add_form_submit($values) {
     
     case 'group':
       $result   = db_insert("`groups`", "name, faculty_id, info", "'{$values['group_name']}', '{$values['faculty_id']}', 'a:0:{}'");
-      $redirect = 'groups/all';
+      $redirect = 'groups/' . $values['faculty_id'];
       break;
+    
+    case 'student':
+      $result   = db_insert("`students`", "name, group_id", "'{$values['student_name']}', '{$values['group_id']}'");
+      $redirect = 'students/' . $values['group_id'];
+      break;
+    
+    case 'teacher':
+      $result   = db_insert("`users`", "name, pass, role", "'{$values['teacher_name']}', '{$values['teacher_pass']}', 'teacher'");
+      $redirect = 'teachers';
+      break;
+    
   }
 
   if ($result) {

@@ -25,6 +25,7 @@ function edit_form($vars) {
   $form = array();
   
   switch ($vars['type']) {
+    
     case 'faculty':
       $faculty_name = db_select_field("`faculties`", "`name`", "`id` = '{$vars['id']}'");
       $form['faculty_name'] = array(
@@ -43,7 +44,6 @@ function edit_form($vars) {
         'value'    => $group_name,
         'required' => TRUE,
       );
-      
       $faculties = db_select_array("`faculties`", "*");
       $options   = array();
       foreach ($faculties as $faculty) {
@@ -56,7 +56,6 @@ function edit_form($vars) {
         'options' => $options,
         'value'   => $faculty_id,
       );
-      
       $group_info_string = db_select_field("`groups`", "`info`", "`id` = '{$vars['id']}'");
       $group_info_array  = unserialize($group_info_string);
       $subjects = db_select_array("`subjects`", "*", '1', 'name');
@@ -78,8 +77,45 @@ function edit_form($vars) {
         }
         $form['teacher_' . $subject['id'] . '_end_markup'] = array('type' => 'item', 'markup'  => '</div>', 'nocover' => TRUE);
       }
-      
       break;
+    
+    case 'student':
+      $student = db_select_row("`students`", "*", "`id` = '{$vars['id']}'");
+      $form['student_name'] = array(
+        'type'     => 'textfield',
+        'title'    => t('Student name'),
+        'value'    => $student['name'],
+        'required' => TRUE,
+      );
+      $groups  = db_select_array("`groups`", "*", "1", "name");
+      $options = array();
+      foreach ($groups as $group) {
+        $options[$group['id']] = $group['name'];
+      }
+      $form['group_id'] = array(
+        'type'    => 'select',
+        'title'   => t('Group'),
+        'options' => $options,
+        'value'   => $student['group_id'],
+      );
+      break;
+    
+    case 'teacher':
+      $teachers = db_select_row("`users`", "*", "`id` = '{$vars['id']}'");
+      $form['teacher_name'] = array(
+        'type'     => 'textfield',
+        'title'    => t('Teacher name'),
+        'value'    => $teachers['name'],
+        'required' => TRUE,
+      );
+      $form['teacher_pass'] = array(
+        'type'     => 'textfield',
+        'title'    => t('Password'),
+        'value'    => $teachers['pass'],
+        'required' => TRUE,
+      );
+      break;
+    
   }
 
   $form['type'] = array(
@@ -126,7 +162,6 @@ function edit_form_submit($values) {
             break;
         }
       }
-      
       $group_info_array = array();
       foreach ($subjects as $subject_id) {
         if (!empty($teachers[$subject_id])) {
@@ -134,12 +169,26 @@ function edit_form_submit($values) {
         }
       }
       $group_info_string = serialize($group_info_array);
-      
       $result = db_update("`groups`",
         "`name` = '{$values['group_name']}', `faculty_id` = '{$values['faculty_id']}', `info` = '$group_info_string'",
         "`id` = '{$values['id']}'");
-      $redirect = 'groups/all';
+      $redirect = 'groups/' . $values['faculty_id'];
       break;
+    
+    case 'student':
+      $result   = db_update("`students`",
+        "`name` = '{$values['student_name']}', `group_id` = '{$values['group_id']}'",
+        "`id` = '{$values['id']}'");
+      $redirect = 'students/' . $values['group_id'];
+      break;
+    
+    case 'teacher':
+      $result   = db_update("`users`",
+        "`name` = '{$values['teacher_name']}', `pass` = '{$values['teacher_pass']}'",
+        "`id` = '{$values['id']}'");
+      $redirect = 'teachers';
+      break;
+    
   }
   
   if ($result) {

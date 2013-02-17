@@ -50,6 +50,7 @@ function delete_form_submit($values) {
   $redirect = TRUE;
   
   switch ($values['type']) {
+    
     case 'faculty':
       $result   = db_delete("`faculties`", "`id` = '{$values['id']}'");
       $redirect = 'faculties';
@@ -69,6 +70,23 @@ function delete_form_submit($values) {
       $result    = in_array(TRUE, $results) && !in_array(FALSE, $results);
       $redirect  = 'groups/all';
       break;
+    
+    case 'student':
+      $results = array();
+      $marks   = db_select_array("`marks`", "*", "`student_id` = '{$values['id']}'");
+      foreach ($marks as $mark) {
+        $results[] = db_delete("`marks`", "`id` = '{$mark['id']}'");
+      }
+      $results[] = db_delete("`students`", "`id` = '{$values['id']}'");
+      $result    = in_array(TRUE, $results) && !in_array(FALSE, $results);
+      $redirect  = 'students/all';
+      break;
+    
+    case 'teacher':
+      $result   = db_delete("`users`", "`id` = '{$values['id']}'");
+      $redirect = 'teachers';
+      break;
+    
   }
   
   if ($result) {

@@ -28,10 +28,21 @@ function groups_page_content($args) {
     'attributes' => array('class' => array('groups-view')),
   );
   
-  $table['header']['title'] = array('data' => t('Group name'));
+  $table['header'] = array(
+    'title'   => array('data' => t('Group name')),
+    'options' => array('data' => t('Options')),
+  );
+  
   foreach ($groups as $group) {
     $table['rows'][$group['id']]['group'] = array(
-      'data' => l($group['name'], 'subjects/' . $group['id']),
+      'data' => $group['name'],
+    );
+    $options = array(
+      l(t('Subjects'), 'subjects/' . $group['id'], array('class' => array('option'))),
+      l(t('Students'), 'students/' . $group['id'], array('class' => array('option'))),
+    );
+    $table['rows'][$group['id']]['options'] = array(
+      'data' => item_list($options),
     );
   }
   
@@ -47,10 +58,6 @@ function groups_page_content($args) {
         'attributes' => array('class' => 'actions'),
       );
     }
-    $table['rows']['actions']['actions'] = array(
-      'data'       => l(t('Add'), "group/add", array('class' => array('button'))),
-      'attributes' => array('colspan' => count($table['header']), 'class' => 'actions'),
-    );
   }
   
   return table($table);

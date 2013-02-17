@@ -23,8 +23,8 @@ function l($text, $path, $attributes = array()) {
   return tag('a', $text, $attributes);
 }
 
-function item_list($items, $attributes = array()) {
-  $output = '';
+function item_list($items, $attributes = array(), $title = '') {
+  $output = !empty($title) ? tag('h3', $title) : '';
   foreach ($items as $item) {
     $output .= tag('li', $item);
   }
