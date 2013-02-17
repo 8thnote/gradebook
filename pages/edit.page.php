@@ -22,8 +22,8 @@ function edit_page_content($args) {
 }
 
 function edit_form($vars) {
-
   $form = array();
+  
   switch ($vars['type']) {
     case 'faculty':
       $faculty_name = db_select_field("`faculties`", "`name`", "`id` = '{$vars['id']}'");
@@ -33,6 +33,52 @@ function edit_form($vars) {
         'value'    => $faculty_name,
         'required' => TRUE,
       );
+      break;
+    
+    case 'group':
+      $group_name = db_select_field("`groups`", "`name`", "`id` = '{$vars['id']}'");
+      $form['group_name'] = array(
+        'type'     => 'textfield',
+        'title'    => t('Group name'),
+        'value'    => $group_name,
+        'required' => TRUE,
+      );
+      
+      $faculties = db_select_array("`faculties`", "*");
+      $options   = array();
+      foreach ($faculties as $faculty) {
+        $options[$faculty['id']] = $faculty['name'];
+      }
+      $faculty_id = db_select_field("`groups`", "`faculty_id`", "`id` = '{$vars['id']}'");
+      $form['faculty_id'] = array(
+        'type'    => 'select',
+        'title'   => t('Faculty'),
+        'options' => $options,
+        'value'   => $faculty_id,
+      );
+      
+      $group_info_string = db_select_field("`groups`", "`info`", "`id` = '{$vars['id']}'");
+      $group_info_array  = unserialize($group_info_string);
+      $subjects = db_select_array("`subjects`", "*", '1', 'name');
+      $teachers = db_select_array("`users`", "*", "`role` = 'teacher'");
+      foreach ($subjects as $subject) {
+        $form['subject_' . $subject['id']] = array(
+          'type'    => 'checkbox',
+          'markup'  => $subject['name'],
+          'checked' => array_key_exists($subject['id'] ,$group_info_array),
+          'class'   => 'subject',
+        );
+        $form['teacher_' . $subject['id'] . '_markup'] = array('type' => 'item', 'markup'  => '<div class="teachers">', 'nocover' => TRUE);
+        foreach ($teachers as $teacher) {
+          $form['teacher_' . $subject['id'] . '_' . $teacher['id']] = array(
+            'type'    => 'checkbox',
+            'markup'  => $teacher['name'],
+            'checked' => !empty($group_info_array[$subject['id']]) && in_array($teacher['id'], $group_info_array[$subject['id']]),
+          );
+        }
+        $form['teacher_' . $subject['id'] . '_end_markup'] = array('type' => 'item', 'markup'  => '</div>', 'nocover' => TRUE);
+      }
+      
       break;
   }
 
@@ -63,6 +109,36 @@ function edit_form_submit($values) {
     case 'faculty':
       $result   = db_update("`faculties`", "`name` = '{$values['faculty_name']}'", "`id` = '{$values['id']}'");
       $redirect = 'faculties';
+      break;
+    
+    case 'group':
+      $subjects = array();
+      $teachers = array();
+      foreach ($values as $key => $value) {
+        $key_parse = explode('_', $key);
+        switch ($key_parse[0]) {
+          case 'subject':
+            $subjects[] = $key_parse[1];
+            break;
+          
+          case 'teacher':
+            $teachers[$key_parse[1]][] = $key_parse[2];
+            break;
+        }
+      }
+      
+      $group_info_array = array();
+      foreach ($subjects as $subject_id) {
+        if (!empty($teachers[$subject_id])) {
+          $group_info_array[$subject_id] = $teachers[$subject_id];
+        }
+      }
+      $group_info_string = serialize($group_info_array);
+      
+      $result = db_update("`groups`",
+        "`name` = '{$values['group_name']}', `faculty_id` = '{$values['faculty_id']}', `info` = '$group_info_string'",
+        "`id` = '{$values['id']}'");
+      $redirect = 'groups/all';
       break;
   }
   

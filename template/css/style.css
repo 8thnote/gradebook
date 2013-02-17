@@ -87,6 +87,17 @@ a.button:active, input[type="submit"]:active {
   top: 1px;
 }
 
+div.teachers {
+  border: 1px solid #000000;
+  height: 64px;
+  overflow-y: scroll;
+  resize: vertical;
+}
+
+#edit_form div {
+  margin: 10px;
+}
+
 #menu li {
   display: inline-block;
 }

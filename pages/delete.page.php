@@ -27,10 +27,6 @@ function delete_form($vars) {
     'type'   => 'item',
     'markup' => t('Are you confirm delete?'),
   );
-  $form['cancel'] = array(
-    'type'   => 'item',
-    'markup' => l(t('Cancel'), $_SERVER['HTTP_REFERER'], array('class' => array('button'))),
-  );
   $form['type'] = array(
     'type'  => 'hidden',
     'value' =>  $vars['type'],
@@ -39,9 +35,13 @@ function delete_form($vars) {
     'type'  => 'hidden',
     'value' =>  $vars['id'],
   );
+  $form['cancel'] = array(
+    'type'   => 'item',
+    'markup' => l(t('Cancel'), $_SERVER['HTTP_REFERER'], array('class' => array('button'))),
+  );
   $form['submit'] = array(
     'type'  => 'submit',
-    'value' => t('Confirm'),
+    'value' => t('Delete'),
   );
   return $form;
 }
@@ -53,6 +53,21 @@ function delete_form_submit($values) {
     case 'faculty':
       $result   = db_delete("`faculties`", "`id` = '{$values['id']}'");
       $redirect = 'faculties';
+      break;
+    
+    case 'group':
+      $results = array();
+      $records = db_select_array("`records`", "*", "`group_id` = '{$values['id']}'");
+      foreach ($records as $record) {
+        $marks = db_select_array("`marks`", "*", "`record_id` = '{$record['id']}'");
+        foreach ($marks as $mark) {
+          $results[] = db_delete("`marks`", "`id` = '{$mark['id']}'");
+        }
+        $results[] = db_delete("`records`", "`id` = '{$record['id']}'");
+      }
+      $results[] = db_delete("`groups`", "`id` = '{$values['id']}'");
+      $result    = in_array(TRUE, $results) && !in_array(FALSE, $results);
+      $redirect  = 'groups/all';
       break;
   }
   

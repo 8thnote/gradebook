@@ -86,6 +86,10 @@ function form($form_id, $vars = array()) {
         $attributes['required'] = 'required';
       }
       
+      if (!empty($form_element['checked'])) {
+        $attributes['checked'] = 'checked';
+      }
+      
       switch ($form_element['type']) {
         case 'hidden':
         case 'textfield':
@@ -93,6 +97,11 @@ function form($form_id, $vars = array()) {
         case 'password':
         case 'submit':
           $buil_element .= '<input' . tag_attributes($attributes) . '>';
+          break;
+        
+        case 'checkbox':
+          $buil_element .= '<input' . tag_attributes($attributes) . '>';
+          $buil_element .= tag('span', $form_element['markup']);
           break;
         
         case 'item':
@@ -115,7 +124,7 @@ function form($form_id, $vars = array()) {
           break;
         
       }
-      $output .= tag('div', $buil_element, array('class' => array($element_name)));
+      $output .= empty($form_element['nocover']) ? tag('div', $buil_element, array('class' => array($element_name))) : $buil_element;
     }
   }
   $output = tag('form', $output, array('id' => $form_id, 'method' => 'post', 'action' => url(get_path()), 'accept-charset' => 'UTF-8'));

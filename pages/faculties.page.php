@@ -46,10 +46,10 @@ function faculties_page_content() {
     }
     $table['rows']['actions']['actions'] = array(
       'data'       => l(t('Add'), "faculty/add", array('class' => array('button'))),
-      'attributes' => array('colspan' => 2, 'class' => 'actions'),
+      'attributes' => array('colspan' => count($table['header']), 'class' => 'actions'),
     );
   }
-  
+
   return table($table);
 }
 

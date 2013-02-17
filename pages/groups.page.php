@@ -15,13 +15,13 @@ function groups_page_access() {
 
 function groups_page_title($args) {
   $faculty_id = $args[1];
-  return db_select_field("`faculties`", "`name`", "`id` = '$faculty_id'");
+  return is_numeric($faculty_id) ? db_select_field("`faculties`", "`name`", "`id` = '$faculty_id'") : t('All groups');
 }
 
 function groups_page_content($args) {
   $faculty_id = $args[1];
-  $faculty    = db_select_field("`faculties`", "`name`", "`id` = '$faculty_id'");
-  $groups     = db_select_array("`groups`", "*", "`faculty_id` = '$faculty_id'");
+  $faculty    = is_numeric($faculty_id) ? db_select_field("`faculties`", "`name`", "`id` = '$faculty_id'") : t('All groups');
+  $groups     = is_numeric($faculty_id) ? db_select_array("`groups`", "*", "`faculty_id` = '$faculty_id'") : db_select_array("`groups`", "*");
   
   $table = array(
     'caption'    => $faculty,
@@ -43,9 +43,14 @@ function groups_page_content($args) {
         l(t('Delete'), "group/{$group['id']}/delete", array('class' => array('button'))),
       );
       $table['rows'][$group['id']]['actions'] = array(
-        'data' => item_list($actions, array('class' => array('actions'))),
+        'data'       => item_list($actions, array('class' => array('actions'))),
+        'attributes' => array('class' => 'actions'),
       );
     }
+    $table['rows']['actions']['actions'] = array(
+      'data'       => l(t('Add'), "group/add", array('class' => array('button'))),
+      'attributes' => array('colspan' => count($table['header']), 'class' => 'actions'),
+    );
   }
   
   return table($table);
