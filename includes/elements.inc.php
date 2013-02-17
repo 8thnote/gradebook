@@ -65,54 +65,53 @@ function form($form_id, $vars = array()) {
   foreach ($form as $element_name => $form_element) {
     if (is_array($form_element) && !empty($form_element['type'])) {
       $buil_element = '';
+      
       if (!empty($form_element['title'])) {
         $buil_element .= tag('p', $form_element['title'], array('class' => array('input-lable')));
       }
+      
+      $attributes = array(
+        'name' => $element_name,
+        'type' => $form_element['type'],
+      );
+      
       if (isset($_POST[$element_name])) {
-        $value = $_POST[$element_name];
+        $attributes['value'] = $_POST[$element_name];
       }
       elseif (isset($form_element['value'])) {
-        $value = $form_element['value'];
+        $attributes['value'] = $form_element['value'];
       }
-      else {
-        $value = '';
+      
+      if (!empty($form_element['required'])) {
+        $attributes['required'] = 'required';
       }
+      
       switch ($form_element['type']) {
-        case 'markup':
-          $buil_element .= $value;
-          break;
-        
         case 'hidden':
-          $buil_element .= '<input' . tag_attributes(array('name'=> $element_name, 'type' => 'hidden', 'value' => $form_element['value'])) . '>';
-          break;
-        
         case 'textfield':
-          $buil_element .= '<input' . tag_attributes(array('name'=> $element_name, 'type' => 'textfield', 'value' => $value)) . '>';
-          break;
-        
         case 'date':
-          $buil_element .= '<input' . tag_attributes(array('name'=> $element_name, 'type' => 'date', 'value' => $value)) . '>';
-          break;
-        
         case 'password':
-          $buil_element .= '<input' . tag_attributes(array('name'=> $element_name, 'type' => 'password')) . '>';
+        case 'submit':
+          $buil_element .= '<input' . tag_attributes($attributes) . '>';
           break;
         
-        case 'submit':
-          $buil_element .= '<input' . tag_attributes(array('name'=> $element_name, 'type' => 'submit', 'value' => $form_element['value'])) . '>';
+        case 'item':
+          $buil_element .= $form_element['markup'];
           break;
         
         case 'textarea':
+          $value = !empty($attributes['value']) ? $attributes['value'] : '';
           $buil_element .= tag('textarea', $value, array('name'=> $element_name));
           break;
         
         case 'select':
           $options = '';
+          $value   = !empty($attributes['value']) ? $attributes['value'] : '';
           foreach ($form_element['options'] as $option_key => $option_value) {
             $attributes = ($value == $option_key)  ? array('value' => $option_key, 'selected' => 'selected') : array('value' => $option_key);
             $options   .= tag('option', $option_value, $attributes);
           }
-          $buil_element .= tag('select', $options, array('name'=> $element_name));
+          $buil_element .= tag('select', $options, array('name' => $element_name));
           break;
         
       }

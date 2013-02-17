@@ -40,9 +40,14 @@ function faculties_page_content() {
         l(t('Delete'), "faculty/{$faculty['id']}/delete", array('class' => array('button'))),
       );
       $table['rows'][$faculty['id']]['actions'] = array(
-        'data' => item_list($actions, array('class' => array('actions'))),
+        'data'       => item_list($actions, array('class' => array('actions'))),
+        'attributes' => array('class' => 'actions'),
       );
     }
+    $table['rows']['actions']['actions'] = array(
+      'data'       => l(t('Add'), "faculty/add", array('class' => array('button'))),
+      'attributes' => array('colspan' => 2, 'class' => 'actions'),
+    );
   }
   
   return table($table);

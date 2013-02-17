@@ -23,6 +23,7 @@ caption {
 ul {
   margin: 0;
   padding: 0;
+  list-style-type: none;
 }
 
 table {
@@ -51,6 +52,10 @@ table.gradebook input, select {
 
 table.gradebook select {
   width: 100%;
+}
+
+td.actions {
+  background-color: #ff6a6a;
 }
 
 ul.gradebook-actions li {

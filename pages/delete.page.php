@@ -18,18 +18,26 @@ function delete_page_title() {
 }
 
 function delete_page_content($args) {
-  return form('delete_form', array('node_type' => $args[0], 'node_id' => $args[1]));
+  return form('delete_form', array('type' => $args[0], 'id' => $args[1]));
 }
 
 function delete_form($vars) {
   $form = array();
   $form['confirm'] = array(
-    'type'  => 'markup',
-    'value' => t('Are you confirm delete?'),
+    'type'   => 'item',
+    'markup' => t('Are you confirm delete?'),
   );
   $form['cancel'] = array(
-    'type'  => 'markup',
-    'value' => l(t('Cancel'), $_SERVER['HTTP_REFERER'], array('class' => array('button'))),
+    'type'   => 'item',
+    'markup' => l(t('Cancel'), $_SERVER['HTTP_REFERER'], array('class' => array('button'))),
+  );
+  $form['type'] = array(
+    'type'  => 'hidden',
+    'value' =>  $vars['type'],
+  );
+  $form['id'] = array(
+    'type'  => 'hidden',
+    'value' =>  $vars['id'],
   );
   $form['submit'] = array(
     'type'  => 'submit',
@@ -37,4 +45,25 @@ function delete_form($vars) {
   );
   return $form;
 }
+
+function delete_form_submit($values) {
+  $redirect = TRUE;
+  
+  switch ($values['type']) {
+    case 'faculty':
+      $result   = db_delete("`faculties`", "`id` = '{$values['id']}'");
+      $redirect = 'faculties';
+      break;
+  }
+  
+  if ($result) {
+    alert(t('Deleted.'));
+    return $redirect;
+  }
+  else {
+    alert(t('Deleting failed.'), 'error');
+    return FALSE;
+  }
+}
+
 ?>
