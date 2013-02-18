@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 3.5.5
+-- version 3.4.10.1deb1
 -- http://www.phpmyadmin.net
 --
--- Хост: 127.0.0.1:3306
--- Время создания: Фев 12 2013 г., 00:51
--- Версия сервера: 5.1.67-community-log
--- Версия PHP: 5.2.17
+-- Хост: localhost
+-- Время создания: Фев 18 2013 г., 17:54
+-- Версия сервера: 5.5.29
+-- Версия PHP: 5.3.10-1ubuntu3.5
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS `groups` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Group ID',
   `name` varchar(255) NOT NULL COMMENT 'Group  Name',
   `faculty_id` int(11) NOT NULL COMMENT 'Faculty ID',
-  `info` varchar(1024) NOT NULL COMMENT 'Information about subjects and teachers',
+  `info` varchar(1024) NOT NULL COMMENT 'Subjects And Teachers Information',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
@@ -68,6 +68,43 @@ INSERT INTO `groups` (`id`, `name`, `faculty_id`, `info`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Структура таблицы `locale`
+--
+
+CREATE TABLE IF NOT EXISTS `locale` (
+  `default` varchar(255) CHARACTER SET utf8 NOT NULL COMMENT 'Default String',
+  `ua` varchar(255) CHARACTER SET utf8 NOT NULL COMMENT 'Ukrainian Translation',
+  UNIQUE KEY `default` (`default`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Дамп данных таблицы `locale`
+--
+
+INSERT INTO `locale` (`default`, `ua`) VALUES
+('Actions', 'Дії'),
+('Add', 'Додати'),
+('Authorization', 'Авторизація'),
+('Current Sum', 'ПК (сума)'),
+('Delete', 'Видалити'),
+('Edit', 'Редагувати'),
+('Faculties', 'Факультети'),
+('Faculty name', 'Назва факультету'),
+('Front', 'Головна'),
+('Gradebook', 'Журнал'),
+('Group name', 'Назва групи'),
+('Modular Sum', 'МК (сума)'),
+('Options', 'Опції'),
+('Student name', 'П.І.Б.'),
+('Students', 'Список студентів'),
+('Subject', 'Предмет'),
+('Subjects', 'Список предметів'),
+('Teachers', 'Викладачі'),
+('Total Sum', 'Загальна сума');
+
+-- --------------------------------------------------------
+
+--
 -- Структура таблицы `marks`
 --
 
@@ -77,7 +114,7 @@ CREATE TABLE IF NOT EXISTS `marks` (
   `record_id` int(11) NOT NULL COMMENT 'Record ID',
   `student_id` int(11) NOT NULL COMMENT 'Student ID',
   `subject_id` int(11) NOT NULL COMMENT 'Subject ID',
-  `author_id` int(11) NOT NULL,
+  `author_id` int(11) NOT NULL COMMENT 'Teacher ID',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
@@ -99,7 +136,7 @@ INSERT INTO `marks` (`id`, `value`, `record_id`, `student_id`, `subject_id`, `au
 CREATE TABLE IF NOT EXISTS `records` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Record ID',
   `type_id` int(11) NOT NULL COMMENT 'Record Type ID',
-  `date` date NOT NULL,
+  `date` date NOT NULL COMMENT 'Date',
   `group_id` int(11) NOT NULL COMMENT 'Group ID',
   `subject_id` int(11) NOT NULL COMMENT 'Subject ID',
   PRIMARY KEY (`id`)
@@ -170,7 +207,7 @@ CREATE TABLE IF NOT EXISTS `subjects` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Subject ID',
   `name` varchar(255) NOT NULL COMMENT 'Subject Name',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
 --
 -- Дамп данных таблицы `subjects`

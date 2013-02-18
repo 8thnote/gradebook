@@ -117,7 +117,8 @@ function clear($text) {
 }
 
 function t($text) {
-  return $text;
+  $translation = db_select_field("`locale`", "`ua`", "`default` = '$text'");
+  return !empty($translation) ? $translation : $text;
 }
 
 function alert($message, $type = 'status') {
