@@ -52,6 +52,14 @@ function add_form($vars) {
       );
       break;
     
+    case 'subject':
+      $form['subject_name'] = array(
+        'type'     => 'textfield',
+        'title'    => t('Subject name'),
+        'required' => TRUE,
+      );
+      break;
+    
     case 'student':
       $form['student_name'] = array(
         'type'     => 'textfield',
@@ -116,6 +124,11 @@ function add_form_submit($values) {
     case 'group':
       $result   = db_insert("`groups`", "name, faculty_id, info", "'{$values['group_name']}', '{$values['faculty_id']}', 'a:0:{}'");
       $redirect = 'groups/' . $values['faculty_id'];
+      break;
+    
+    case 'subject':
+      $result   = db_insert("`subjects`", "name", "'{$values['subject_name']}'");
+      $redirect = 'subjects/all';
       break;
     
     case 'student':

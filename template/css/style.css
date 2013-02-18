@@ -3,7 +3,6 @@
  */
 body {
   margin: 20px auto;
-  /*width: 1280px;*/
   word-break: break-all;
   font-family: serif;
 }
@@ -63,6 +62,7 @@ ul.gradebook-actions li {
 }
 
 a.button, input[type="submit"] {
+  width: 100px;
   display: inline-block;
   white-space: nowrap;
   background-color: #ccc;
@@ -76,6 +76,7 @@ a.button, input[type="submit"] {
   text-shadow: 0 1px 0 rgba(255,255,255,.8);
   text-align: center;
   cursor: pointer;
+  box-sizing: border-box;
 }
 
 a.button:hover, input[type="submit"]:hover { 
@@ -85,6 +86,11 @@ a.button:hover, input[type="submit"]:hover {
 a.button:active, input[type="submit"]:active {
   position: relative;
   top: 1px;
+}
+
+ul.options li {
+  display: block;
+  margin: 10px;
 }
 
 div.teachers {

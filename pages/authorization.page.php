@@ -23,7 +23,7 @@ function authorization_page_content() {
   $output  = $user_id ? form('authorization_logout_form', array('name' => $_SESSION['user']['name'])) : form('authorization_login_form');
   
   if (user_role('admin')) {
-    $nodes = array('faculty', 'group', 'student', 'teacher');
+    $nodes = array('faculty', 'group', 'subject', 'student', 'teacher');
     $items = array();
     foreach ($nodes as $node) {
       $items[] = l(t('Add ' . $node), "$node/add", array('class' => array('button')));

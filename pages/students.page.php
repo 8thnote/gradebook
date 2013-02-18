@@ -2,10 +2,11 @@
 
 function students_page_info() {
   return array(
-    'path'    => 'students/%',
-    'title'   => 'students_page_title',
-    'content' => 'students_page_content',
-    'access'  => 'students_page_access',
+    'path'       => 'students/%',
+    'title'      => 'students_page_title',
+    'breadcrumb' => 'students_page_breadcrumb',
+    'content'    => 'students_page_content',
+    'access'     => 'students_page_access',
   );
 }
 
@@ -16,6 +17,20 @@ function students_page_access() {
 function students_page_title($args) {
   $group_id = $args[1];
   return is_numeric($group_id) ? db_select_field("`groups`", "`name`", "`id` = '$group_id'") : t('All students');
+}
+
+function students_page_breadcrumb($args) {
+  $group_id = $args[1];
+  if (is_numeric($group_id)) {
+    $group_name   = db_select_field("`groups`", "`name`", "`id` = '$group_id'");
+    $faculty_id   = db_select_field("`groups`", "`faculty_id`", "`id` = '$group_id'");
+    $faculty_name = db_select_field("`faculties`", "`name`", "`id` = '$faculty_id'");
+    $crumbs       = array(
+      0 => l($faculty_name, 'groups/' . $faculty_id),
+      1 => $group_name,
+    );
+    return item_list($crumbs);
+  }
 }
 
 function students_page_content($args) {

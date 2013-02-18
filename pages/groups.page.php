@@ -2,10 +2,11 @@
 
 function groups_page_info() {
   return array(
-    'path'    => 'groups/%',
-    'title'   => 'groups_page_title',
-    'content' => 'groups_page_content',
-    'access'  => 'groups_page_access',
+    'path'       => 'groups/%',
+    'title'      => 'groups_page_title',
+    'breadcrumb' => 'groups_page_breadcrumb',
+    'content'    => 'groups_page_content',
+    'access'     => 'groups_page_access',
   );
 }
 
@@ -16,6 +17,16 @@ function groups_page_access() {
 function groups_page_title($args) {
   $faculty_id = $args[1];
   return is_numeric($faculty_id) ? db_select_field("`faculties`", "`name`", "`id` = '$faculty_id'") : t('All groups');
+}
+
+function groups_page_breadcrumb($args) {
+  $faculty_id = $args[1];
+  if (is_numeric($faculty_id)) {
+    $crumbs = array(
+      0 => db_select_field("`faculties`", "`name`", "`id` = '$faculty_id'"),
+    );
+    return item_list($crumbs);
+  }
 }
 
 function groups_page_content($args) {
@@ -38,11 +49,11 @@ function groups_page_content($args) {
       'data' => $group['name'],
     );
     $options = array(
-      l(t('Subjects'), 'subjects/' . $group['id'], array('class' => array('option'))),
-      l(t('Students'), 'students/' . $group['id'], array('class' => array('option'))),
+      l(t('Subjects'), 'subjects/' . $group['id']),
+      l(t('Students'), 'students/' . $group['id']),
     );
     $table['rows'][$group['id']]['options'] = array(
-      'data' => item_list($options),
+      'data' => item_list($options, array('class' => array('options'))),
     );
   }
   

@@ -79,6 +79,16 @@ function edit_form($vars) {
       }
       break;
     
+    case 'subject':
+      $subject = db_select_row("`subjects`", "*", "`id` = '{$vars['id']}'");
+      $form['subject_name'] = array(
+        'type'     => 'textfield',
+        'title'    => t('Subject name'),
+        'value'    => $subject['name'],
+        'required' => TRUE,
+      );
+      break;
+    
     case 'student':
       $student = db_select_row("`students`", "*", "`id` = '{$vars['id']}'");
       $form['student_name'] = array(
@@ -173,6 +183,11 @@ function edit_form_submit($values) {
         "`name` = '{$values['group_name']}', `faculty_id` = '{$values['faculty_id']}', `info` = '$group_info_string'",
         "`id` = '{$values['id']}'");
       $redirect = 'groups/' . $values['faculty_id'];
+      break;
+    
+    case 'subject':
+      $result   = db_update("`subjects`", "`name` = '{$values['subject_name']}'", "`id` = '{$values['id']}'");
+      $redirect = 'subjects/all';
       break;
     
     case 'student':

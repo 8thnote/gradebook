@@ -2,10 +2,11 @@
 
 function gradebook_page_info() {
   return array(
-    'path'    => 'gradebook/%/%',
-    'title'   => 'gradebook_page_title',
-    'content' => 'gradebook_page_content',
-    'access'  => 'gradebook_page_access',
+    'path'       => 'gradebook/%/%',
+    'title'      => 'gradebook_page_title',
+    'breadcrumb' => 'gradebook_page_breadcrumb',
+    'content'    => 'gradebook_page_content',
+    'access'     => 'gradebook_page_access',
   );
 }
 
@@ -19,6 +20,21 @@ function gradebook_page_title($args) {
   $group_name   = db_select_field("`groups`", "`name`", "`id` = '$group_id'");
   $subject_name = db_select_field("`subjects`", "`name`", "`id` = '$subject_id'");
   return $subject_name . ' | ' . $group_name;
+}
+
+function gradebook_page_breadcrumb($args) {
+  $group_id     = $args[1];
+  $group_name   = db_select_field("`groups`", "`name`", "`id` = '$group_id'");
+  $subject_id   = $args[2];
+  $subject_name = db_select_field("`subjects`", "`name`", "`id` = '$subject_id'");
+  $faculty_id   = db_select_field("`groups`", "`faculty_id`", "`id` = '$group_id'");
+  $faculty_name = db_select_field("`faculties`", "`name`", "`id` = '$faculty_id'");
+  $crumbs       = array(
+    l($faculty_name, 'groups/' . $faculty_id),
+    l($group_name, 'subjects/' . $group_id),
+    $subject_name,
+  );
+  return item_list($crumbs);
 }
 
 function gradebook_page_content($args) {

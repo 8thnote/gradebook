@@ -71,6 +71,21 @@ function delete_form_submit($values) {
       $redirect  = 'groups/all';
       break;
     
+    case 'subject':
+      $results = array();
+      $records = db_select_array("`records`", "*", "`subject_id` = '{$values['id']}'");
+      foreach ($records as $record) {
+        $results[] = db_delete("`records`", "`id` = '{$record['id']}'");
+      }
+      $marks = db_select_array("`marks`", "*", "`subject_id` = '{$values['id']}'");
+      foreach ($marks as $mark) {
+        $results[] = db_delete("`marks`", "`id` = '{$mark['id']}'");
+      }
+      $results[] = db_delete("`subjects`", "`id` = '{$values['id']}'");
+      $result    = in_array(TRUE, $results) && !in_array(FALSE, $results);
+      $redirect  = 'subjects/all';
+      break;
+    
     case 'student':
       $results = array();
       $marks   = db_select_array("`marks`", "*", "`student_id` = '{$values['id']}'");
