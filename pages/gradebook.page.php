@@ -71,11 +71,20 @@ function gradebook_page_content($args) {
   $table['header']['current_sum'] = array('data' => t('Current Sum'));
   $table['header']['modular_sum'] = array('data' => t('Modular Sum'));
   $table['header']['total_sum']   = array('data' => t('Total Sum'));
+  $table['header']['absence_sum'] = array('data' => t('Absence Num'));
   foreach ($students as $student) {
     $marks = db_select_array("`marks`", "*", "`student_id` = '{$student['id']}' AND `subject_id` = '$subject_id'");
     $current_sum = 0;
     $modular_sum = 0;
+    $absence_num = 0;
     foreach ($marks as $mark) {
+      if (is_numeric($mark['value'])) {
+        $value = $mark['value'];
+      }
+      else {
+        $value = 0;
+        $absence_num ++;
+      }
       $value = is_numeric($mark['value']) ? $mark['value'] : 0;
       $record_type = db_select_field("`records`", "`type_id`", "`id` = '{$mark['record_id']}'");
       if ($record_type == 4) {
@@ -88,6 +97,7 @@ function gradebook_page_content($args) {
     $table['rows'][$student['id']]['current_sum'] = array('data' => $current_sum);
     $table['rows'][$student['id']]['modular_sum'] = array('data' => $modular_sum);
     $table['rows'][$student['id']]['total_sum']   = array('data' => ($current_sum + $modular_sum));
+    $table['rows'][$student['id']]['absence_sum'] = array('data' => $absence_num);
   }
   
   if (user_role('admin') || user_role('teacher')) {

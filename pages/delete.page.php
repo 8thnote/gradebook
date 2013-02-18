@@ -14,7 +14,7 @@ function delete_page_access() {
 }
 
 function delete_page_title() {
-  return t('Delete confirm');
+  return t('Content deleting');
 }
 
 function delete_page_content($args) {
@@ -52,8 +52,22 @@ function delete_form_submit($values) {
   switch ($values['type']) {
     
     case 'faculty':
-      $result   = db_delete("`faculties`", "`id` = '{$values['id']}'");
-      $redirect = 'faculties';
+      $results = array();
+      $groups = db_select_array("`groups`", "*", "`faculty_id` = '{$values['id']}'");
+      foreach ($groups as $group) {
+        $records = db_select_array("`records`", "*", "`group_id` = '{$group['id']}'");
+        foreach ($records as $record) {
+          $marks = db_select_array("`marks`", "*", "`record_id` = '{$record['id']}'");
+          foreach ($marks as $mark) {
+            $results[] = db_delete("`marks`", "`id` = '{$mark['id']}'");
+          }
+          $results[] = db_delete("`records`", "`id` = '{$record['id']}'");
+        }
+        $results[] = db_delete("`groups`", "`id` = '{$group['id']}'");
+      }
+      $results[] = db_delete("`faculties`", "`id` = '{$values['id']}'");
+      $result    = in_array(TRUE, $results) && !in_array(FALSE, $results);
+      $redirect  = 'faculties';
       break;
     
     case 'group':

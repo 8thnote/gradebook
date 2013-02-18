@@ -13,8 +13,8 @@ function add_page_access() {
   return user_role('admin');
 }
 
-function add_page_title($args) {
-  return t('Adding of ' . $args[0]);
+function add_page_title() {
+  return t('Content adding');
 }
 
 function add_page_content($args) {
@@ -81,7 +81,7 @@ function add_form($vars) {
     case 'teacher':
       $form['teacher_name'] = array(
         'type'     => 'textfield',
-        'title'    => t('Teacher name'),
+        'title'    => t('Name'),
         'required' => TRUE,
       );
       $form['teacher_pass'] = array(

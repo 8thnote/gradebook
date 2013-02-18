@@ -14,7 +14,7 @@ function edit_page_access() {
 }
 
 function edit_page_title($args) {
-  return t('Editing of ' . $args[0]);
+  return t('Content editing');
 }
 
 function edit_page_content($args) {

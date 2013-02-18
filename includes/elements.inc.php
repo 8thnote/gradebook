@@ -56,6 +56,10 @@ function table($vars) {
       $output .= tag('tr', $row_output);
     }
   }
+  else {
+    $row_output = tag('td', t('Empty'), array('colspan' => count($vars['header'])));
+    $output    .= tag('tr', $row_output);
+  }
   return !empty($vars['attributes']) ? tag('table', $output, $vars['attributes']) : tag('table', $output);
 }
 

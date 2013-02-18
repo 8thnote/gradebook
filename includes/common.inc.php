@@ -12,8 +12,7 @@ function base_url() {
 }
 
 function get_path() {
-  $path = rtrim($_GET['q'], '\/');
-  return !empty($path) ? $path : 'frontpage';
+  return !empty($_GET['q']) ? rtrim($_GET['q'], '\/') : 'frontpage';
 }
 
 function url($path) {

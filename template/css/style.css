@@ -2,8 +2,9 @@
  * Style.css
  */
 body {
+  min-width: 1024px;
   margin: 20px auto;
-  word-break: break-all;
+  word-break: break-word;
   font-family: serif;
 }
 
@@ -17,6 +18,15 @@ caption {
   margin: 5px;
   font-size: 28px;
   font-weight: bold;
+}
+
+a, a:visited {
+  color: #0000FF;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #000000;
 }
 
 ul {
@@ -39,6 +49,7 @@ table.gradebook {
 table.gradebook th, td {
   padding: 5px;
   border: 1px solid #808080;
+  min-width: 80px;
 }
 
 table.gradebook td.title, th {
@@ -62,7 +73,7 @@ ul.gradebook-actions li {
 }
 
 a.button, input[type="submit"] {
-  width: 100px;
+  width: 120px;
   display: inline-block;
   white-space: nowrap;
   background-color: #ccc;
@@ -95,8 +106,8 @@ ul.options li {
 
 div.teachers {
   border: 1px solid #000000;
-  height: 64px;
-  overflow-y: scroll;
+  height: 32px;
+  overflow-y: auto;
   resize: vertical;
 }
 
@@ -122,8 +133,12 @@ div.teachers {
   text-shadow: 0 0 3px #708090;
 }
 
+#menu a:hover {
+  background-color: #DCDCDC;
+}
+
 #menu a.active {
-  border: 1px solid #000000;
+  background-color: #DCDCDC;
 }
 
 #message p {
@@ -141,4 +156,20 @@ div.teachers {
 
 #content {
   padding: 10px;
+}
+
+#breadcrumb li {
+  display: inline;
+}
+
+#breadcrumb a {
+  text-decoration: none;
+}
+
+#breadcrumb a:after {
+  content: ' » ';
+}
+
+#content {
+  overflow-x: auto;
 }

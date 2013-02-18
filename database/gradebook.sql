@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 3.4.10.1deb1
+-- version 3.5.5
 -- http://www.phpmyadmin.net
 --
--- Хост: localhost
--- Время создания: Фев 18 2013 г., 17:54
--- Версия сервера: 5.5.29
--- Версия PHP: 5.3.10-1ubuntu3.5
+-- Хост: 127.0.0.1:3306
+-- Время создания: Фев 18 2013 г., 23:04
+-- Версия сервера: 5.1.67-community-log
+-- Версия PHP: 5.2.17
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -30,18 +30,7 @@ CREATE TABLE IF NOT EXISTS `faculties` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Faculty ID',
   `name` varchar(255) NOT NULL COMMENT 'Faculty Name',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
-
---
--- Дамп данных таблицы `faculties`
---
-
-INSERT INTO `faculties` (`id`, `name`) VALUES
-(1, 'Машинобудівний факультет (МБФ)'),
-(2, 'Факультет бізнесу (ФБ)'),
-(3, 'Факультет будівництва та дизайну (ФБД)'),
-(4, 'Факультет екології та приладо-енергетичних систем (ФЕПЕС)'),
-(5, 'Факультет комп''ютерних наук та інформаційних технологій (ФКНІТ)');
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -55,15 +44,7 @@ CREATE TABLE IF NOT EXISTS `groups` (
   `faculty_id` int(11) NOT NULL COMMENT 'Faculty ID',
   `info` varchar(1024) NOT NULL COMMENT 'Subjects And Teachers Information',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
-
---
--- Дамп данных таблицы `groups`
---
-
-INSERT INTO `groups` (`id`, `name`, `faculty_id`, `info`) VALUES
-(1, 'КСМ-21', 5, 'a:2:{i:1;a:1:{i:0;i:2;}i:3;a:1:{i:0;i:3;}}'),
-(2, 'АТ-31', 1, 'a:2:{i:1;a:1:{i:0;i:2;}i:3;a:1:{i:0;i:3;}}');
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -82,22 +63,54 @@ CREATE TABLE IF NOT EXISTS `locale` (
 --
 
 INSERT INTO `locale` (`default`, `ua`) VALUES
+('Absence Num', 'Кількість пропусків'),
 ('Actions', 'Дії'),
 ('Add', 'Додати'),
+('Add faculty', 'Додати факультет'),
+('Add group', 'Додати групу'),
+('Add student', 'Додати студента'),
+('Add subject', 'Додати предмет'),
+('Add teacher', 'Додати викладача'),
+('All groups', 'Всі групи'),
+('All students', 'Всі студенти'),
+('All subjects', 'Всі предмети'),
+('Are you confirm delete?', 'Ви підтверджуєте видалення?'),
 ('Authorization', 'Авторизація'),
+('Cancel', 'Скасувати'),
+('Content adding', 'Додавання контенту'),
+('Content deleting', 'Видалення контенту'),
+('Content editing', 'Редагування контенту'),
 ('Current Sum', 'ПК (сума)'),
 ('Delete', 'Видалити'),
+('Deleted.', 'Видалено.'),
 ('Edit', 'Редагувати'),
+('Empty', 'Записів немає'),
+('Enter success.', 'Вхід здійснено.'),
+('Exit', 'Вийти'),
+('Exit success.', 'Вихід здійснено.'),
 ('Faculties', 'Факультети'),
+('Faculty', 'Факультет'),
 ('Faculty name', 'Назва факультету'),
 ('Front', 'Головна'),
 ('Gradebook', 'Журнал'),
+('Gradebook saved.', 'Журнал збережено.'),
+('Group', 'Група'),
 ('Group name', 'Назва групи'),
+('Hello', 'Привіт'),
+('lab', 'ЛАБ'),
+('lecture', 'Л'),
 ('Modular Sum', 'МК (сума)'),
+('module', 'МК'),
+('Name', 'Ім''я'),
 ('Options', 'Опції'),
+('Password', 'Пароль'),
+('practice', 'П'),
+('Save', 'Зберегти'),
+('Saved.', 'Збережено.'),
 ('Student name', 'П.І.Б.'),
 ('Students', 'Список студентів'),
 ('Subject', 'Предмет'),
+('Subject name', 'Назва предмета'),
 ('Subjects', 'Список предметів'),
 ('Teachers', 'Викладачі'),
 ('Total Sum', 'Загальна сума');
@@ -116,16 +129,7 @@ CREATE TABLE IF NOT EXISTS `marks` (
   `subject_id` int(11) NOT NULL COMMENT 'Subject ID',
   `author_id` int(11) NOT NULL COMMENT 'Teacher ID',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
-
---
--- Дамп данных таблицы `marks`
---
-
-INSERT INTO `marks` (`id`, `value`, `record_id`, `student_id`, `subject_id`, `author_id`) VALUES
-(1, 'Н', 2, 1, 1, 2),
-(2, '5', 3, 2, 1, 2),
-(3, '3', 4, 1, 1, 1);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -140,17 +144,7 @@ CREATE TABLE IF NOT EXISTS `records` (
   `group_id` int(11) NOT NULL COMMENT 'Group ID',
   `subject_id` int(11) NOT NULL COMMENT 'Subject ID',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
-
---
--- Дамп данных таблицы `records`
---
-
-INSERT INTO `records` (`id`, `type_id`, `date`, `group_id`, `subject_id`) VALUES
-(1, 1, '2013-02-05', 1, 1),
-(2, 2, '2013-02-06', 1, 1),
-(3, 3, '2013-02-15', 1, 1),
-(4, 4, '2013-02-04', 1, 1);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -162,7 +156,7 @@ CREATE TABLE IF NOT EXISTS `record_types` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Record Type ID',
   `name` varchar(64) NOT NULL COMMENT 'Record Type Name',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 --
 -- Дамп данных таблицы `record_types`
@@ -185,17 +179,7 @@ CREATE TABLE IF NOT EXISTS `students` (
   `name` varchar(255) NOT NULL COMMENT 'Student Name',
   `group_id` int(11) NOT NULL COMMENT 'Group ID',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
-
---
--- Дамп данных таблицы `students`
---
-
-INSERT INTO `students` (`id`, `name`, `group_id`) VALUES
-(1, 'Саша', 1),
-(2, 'Пєтя', 1),
-(3, 'Андрій', 2),
-(4, 'Вася', 2);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -207,17 +191,7 @@ CREATE TABLE IF NOT EXISTS `subjects` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Subject ID',
   `name` varchar(255) NOT NULL COMMENT 'Subject Name',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
-
---
--- Дамп данных таблицы `subjects`
---
-
-INSERT INTO `subjects` (`id`, `name`) VALUES
-(1, 'Вища математика'),
-(2, 'Українська мова'),
-(3, 'Фізика'),
-(4, 'Програмування');
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -238,9 +212,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `pass`, `role`) VALUES
-(1, 'admin', '1', 'admin'),
-(2, 'Вчитель математики', '1', 'teacher'),
-(3, 'Вчитель фізики', '1', 'teacher');
+(1, 'admin', '1', 'admin');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
