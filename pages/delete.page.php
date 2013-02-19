@@ -55,6 +55,10 @@ function delete_form_submit($values) {
       $results = array();
       $groups = db_select_array("`groups`", "*", "`faculty_id` = '{$values['id']}'");
       foreach ($groups as $group) {
+        $students = db_select_array("`students`", "*", "`group_id` = '{$group['id']}'");
+        foreach ($students as $student) {
+          $results[] = db_delete("`students`", "`id` = '{$student['id']}'");
+        }
         $records = db_select_array("`records`", "*", "`group_id` = '{$group['id']}'");
         foreach ($records as $record) {
           $marks = db_select_array("`marks`", "*", "`record_id` = '{$record['id']}'");
@@ -71,7 +75,11 @@ function delete_form_submit($values) {
       break;
     
     case 'group':
-      $results = array();
+      $results  = array();
+      $students = db_select_array("`students`", "*", "`group_id` = '{$values['id']}'");
+      foreach ($students as $student) {
+        $results[] = db_delete("`students`", "`id` = '{$student['id']}'");
+      }
       $records = db_select_array("`records`", "*", "`group_id` = '{$values['id']}'");
       foreach ($records as $record) {
         $marks = db_select_array("`marks`", "*", "`record_id` = '{$record['id']}'");

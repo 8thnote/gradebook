@@ -75,35 +75,52 @@ function get_page() {
   if (!empty($page)) {
     $page_access_function = $page['access'];
     if ($page_access_function($path_args)) {
-      $page['args'] = $path_args;
-      return $page;
+      $page['args']   = $path_args;
+      $page['status'] = '200 OK'; 
     }
     else {
-      exit('access_denied');
+      $page['status'] = '403 Forbidden';
     }
   }
   else {
-    exit('page_not_found');
+    $page['status'] = '404 Not Found';
   }
+  header($_SERVER['SERVER_PROTOCOL'] . ' '. $page['status']);
+  return $page;
 }
 
 function execute() {
   $page = get_page();
   $vars = array(
-    'header'    => get_header(),
-    'menu'      => get_menu(),
-    'message'   => get_message(),
-    'copyright' => get_copyright(),
+    'header'     => get_header(),
+    'menu'       => get_menu(),
+    'message'    => get_message(),
+    'copyright'  => get_copyright(),
+    'title'      => FALSE,
+    'breadcrumb' => FALSE,
+    'content'    => FALSE,
   );
-  $elements = array('title', 'breadcrumb', 'content');
-  foreach ($elements as $element) {
-    if (isset($page[$element])) {
-      $function       = $page[$element];
-      $vars[$element] = $function($page['args']);
-    }
-    else {
-      $vars[$element] = FALSE;
-    }
+  switch ($page['status']) {
+    
+    case '200 OK':
+      foreach ($vars as $element => $value) {
+        if (isset($page[$element])) {
+          $function       = $page[$element];
+          $vars[$element] = $function($page['args']);
+        }
+      }
+      break;
+    
+    case '403 Forbidden':
+      $vars['title']   = '403 Forbidden';
+      $vars['content'] = '<h1>Forbidden</h1>';
+      break;
+    
+    case '404 Not Found':
+      $vars['title']   = '404 Not Found';
+      $vars['content'] = '<h1>Not Found</h1>';
+      break;
+    
   }
   print render_template('html', $vars);
 }

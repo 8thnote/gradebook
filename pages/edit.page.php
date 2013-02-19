@@ -152,6 +152,7 @@ function edit_form_submit($values) {
   $redirect = TRUE;
   
   switch ($values['type']) {
+    
     case 'faculty':
       $result   = db_update("`faculties`", "`name` = '{$values['faculty_name']}'", "`id` = '{$values['id']}'");
       $redirect = 'faculties';
