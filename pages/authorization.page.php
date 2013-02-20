@@ -69,7 +69,7 @@ function authorization_login_form() {
   );
   $form['submit'] = array(
     'type'  => 'submit',
-    'value' => t('Submit'),
+    'value' => t('Enter'),
   );
   return $form;
 }

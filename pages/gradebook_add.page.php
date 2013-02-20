@@ -32,7 +32,7 @@ function gradebook_add_form($vars) {
   $record_types   = db_select_array("`record_types`", "*");
   $record_options = array();
   foreach ($record_types as $record_type) {
-    $record_options[$record_type['id']] = $record_type['name'];
+    $record_options[$record_type['id']] = t($record_type['name']);
   }
   $form['record_type'] = array(
     'type'    => 'select',

@@ -9,8 +9,19 @@ function gradebook_edit_page_info() {
   );
 }
 
-function gradebook_edit_page_access() {
-  return user_role('admin') || user_role('teacher');
+function gradebook_edit_page_access($args) {
+  $group_id   = $args[1];
+  $subject_id = $args[2];
+  $access     = FALSE;
+  if (user_role('admin')) {
+    $access = TRUE;
+  }
+  elseif (user_role('teacher')) {
+    $group_info_string = db_select_field("`groups`", "`info`", "`id` = '$group_id'");
+    $group_info_array  = unserialize($group_info_string);
+    $access = !empty($group_info_array[$subject_id]) && in_array($_SESSION['user']['id'], $group_info_array[$subject_id]);
+  }
+  return $access;
 }
 
 function gradebook_edit_page_title($args) {
@@ -36,7 +47,10 @@ function gradebook_edit_page_content($args) {
     'attributes' => array('class' => array('gradebook', 'gradebook-edit')),
   );
 
-  $table['header']['students'] = array('data' => t('Students'));
+  $table['header']['students'] = array(
+    'data'       => t('Students'),
+    'attributes' => array('class' => 'title'),
+  );
   foreach ($students as $student) {
     $table['rows'][$student['id']]['title'] = array(
       'data'       => $student['name'],
@@ -48,7 +62,7 @@ function gradebook_edit_page_content($args) {
     $record_options = '';
     foreach ($record_types as $record_type) {
       $attributes = ($record_type['id'] == $record['type_id'])  ? array('value' => $record_type['id'], 'selected' => 'selected') : array('value' => $record_type['id']);
-      $record_options .= tag('option', $record_type['name'], $attributes);
+      $record_options .= tag('option', t($record_type['name']), $attributes);
     }
     $record_type_select = tag('select', $record_options, array('name'=> 'record_type_' . $record['id'], 'form' => 'gradebook_edit_form'));
     $record_date_input  = '<input' . tag_attributes(array(

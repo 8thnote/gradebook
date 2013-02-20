@@ -51,7 +51,10 @@ function gradebook_page_content($args) {
     'attributes' => array('class' => array('gradebook', 'gradebook-view')),
   );
   
-  $table['header']['students'] = array('data' => t('Students'));
+  $table['header']['students'] = array(
+    'data'       => t('Students'),
+    'attributes' => array('class' => 'title'),
+  );
   foreach ($students as $student) {
     $table['rows'][$student['id']]['title'] = array(
       'data'       => $student['name'],
@@ -100,7 +103,7 @@ function gradebook_page_content($args) {
     $table['rows'][$student['id']]['absence_sum'] = array('data' => $absence_num);
   }
   
-  if (user_role('admin') || user_role('teacher')) {
+  if (gradebook_edit_page_access($args)) {
     $actions = array(
       l(t('Edit'), "gradebook/$group_id/$subject_id/edit", array('class' => array('button'))),
       l(t('Add'), "gradebook/$group_id/$subject_id/add", array('class' => array('button'))),

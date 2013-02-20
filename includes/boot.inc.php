@@ -3,7 +3,6 @@
 require_once  ROOT_DIR . '/includes/common.inc.php';
 require_once  ROOT_DIR . '/includes/database.inc.php';
 require_once  ROOT_DIR . '/includes/elements.inc.php';
-require_once  ROOT_DIR . '/includes/content.inc.php';
 
 define('BASE_PATH', base_path());
 define('BASE_URL', base_url());

@@ -50,10 +50,16 @@ table.gradebook th, td {
   padding: 5px;
   border: 1px solid #808080;
   min-width: 80px;
+  text-align: center;
 }
 
 table.gradebook td.title, th {
   font-weight: bold;
+}
+
+table.gradebook .title {
+  min-width: 200px;
+  text-align: left;
 }
 
 table.gradebook input, select {
