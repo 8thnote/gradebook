@@ -135,7 +135,11 @@ function form($form_id, $vars = array()) {
   if (isset($_POST['form_id']) && ($_POST['form_id'] == $form_id)) {
     $submit_callback = $form_id . '_submit';
     if (function_exists($submit_callback)) {
-      $submit_result = $submit_callback($_POST);
+      $submit_values = array();
+      foreach ($_POST as $key => $value) {
+        $submit_values[$key] = mysql_real_escape_string($value);
+      }
+      $submit_result = $submit_callback($submit_values);
       if ($submit_result !== FALSE) {
         $redirect_url = is_bool($submit_result) ? url(get_path()) : url($submit_result);
         header('Location: ' . $redirect_url);
