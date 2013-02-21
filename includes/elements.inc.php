@@ -86,12 +86,20 @@ function form($form_id, $vars = array()) {
         $attributes['value'] = $form_element['value'];
       }
       
+      if (!empty($form_element['class'])) {
+        $attributes['class'] = $form_element['class'];
+      }
+      
       if (!empty($form_element['required'])) {
         $attributes['required'] = 'required';
       }
       
       if (!empty($form_element['checked'])) {
         $attributes['checked'] = 'checked';
+      }
+      
+      if (!empty($form_element['onclick'])) {
+        $attributes['onclick'] = $form_element['onclick'];
       }
       
       switch ($form_element['type']) {

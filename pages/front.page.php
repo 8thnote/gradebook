@@ -14,7 +14,7 @@ function front_page_access() {
 }
 
 function front_page_title() {
-  return 'Frontpage';
+  return t('Front');
 }
 
 function front_page_content() {

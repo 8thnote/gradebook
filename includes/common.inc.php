@@ -172,7 +172,7 @@ function get_header() {
 }
 
 function get_copyright() {
-  return tag('strong' ,t('Made by RomiOS'));
+  return tag('strong', t('Copyright'));
 }
 
 ?>

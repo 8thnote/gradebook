@@ -1,17 +1,12 @@
 /**
  * Style.css
  */
+
 body {
   min-width: 1024px;
   margin: 20px auto;
   word-break: break-word;
   font-family: serif;
-}
-
-div #header, #menu, #breadcrumb, #content, #footer {
-  margin: 10px;
-  padding: 10px;
-  box-shadow: 0 0 10px #000000;
 }
 
 caption {
@@ -38,32 +33,33 @@ ul {
 table {
   width: 100%;
   text-align: left;
-}
-
-table.gradebook {
   border-spacing: 0;
   border: 1px solid #000000;
+}
+
+th, td {
+  padding: 5px;
+  border: 1px solid #808080;
+}
+
+div #header, #menu, #breadcrumb, #content, #footer {
+  margin: 10px;
+  padding: 10px;
   box-shadow: 0 0 10px #000000;
 }
 
-table.gradebook th, td {
-  padding: 5px;
-  border: 1px solid #808080;
-  min-width: 80px;
-  text-align: center;
+td.title, th {
+  font-weight: bold;
 }
 
-table.gradebook td.title, th {
-  font-weight: bold;
+table.gradebook th, table.gradebook td {
+  min-width: 80px;
+  text-align: center;
 }
 
 table.gradebook .title {
   min-width: 200px;
   text-align: left;
-}
-
-table.gradebook input, select {
-  display: block;
 }
 
 table.gradebook select {
@@ -112,7 +108,7 @@ ul.options li {
 
 div.teachers {
   border: 1px solid #000000;
-  height: 32px;
+  height: 128px;
   overflow-y: auto;
   resize: vertical;
 }
@@ -143,10 +139,6 @@ div.teachers {
   background-color: #DCDCDC;
 }
 
-#menu a.active {
-  background-color: #DCDCDC;
-}
-
 #message p {
   margin: 10px;
   padding: 10px;
@@ -166,10 +158,6 @@ div.teachers {
 
 #breadcrumb li {
   display: inline;
-}
-
-#breadcrumb a {
-  text-decoration: none;
 }
 
 #breadcrumb a:after {
