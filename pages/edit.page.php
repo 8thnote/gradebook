@@ -61,13 +61,19 @@ function edit_form($vars) {
       $subjects = db_select_array("`subjects`", "*", '1', 'name');
       $teachers = db_select_array("`users`", "*", "`role` = 'teacher'");
       foreach ($subjects as $subject) {
+        $teachers_block_id  = 'subject-' . $subject['id'] . '-teachers';
+        $teachers_block_vis = array_key_exists($subject['id'] ,$group_info_array) ? 'block' : 'none';
         $form['subject_' . $subject['id']] = array(
           'type'    => 'checkbox',
           'markup'  => $subject['name'],
           'checked' => array_key_exists($subject['id'] ,$group_info_array),
-          'class'   => 'subject',
+          'onclick' => "document.getElementById('$teachers_block_id').style.display = (this.checked) ? 'block' : 'none';",
         );
-        $form['teacher_' . $subject['id'] . '_markup'] = array('type' => 'item', 'markup'  => '<div class="teachers">', 'nocover' => TRUE);
+        $form['teacher_' . $subject['id'] . '_markup'] = array(
+          'type'    => 'item',
+          'markup'  => '<div class="teachers" id="' . $teachers_block_id . '" style="display: ' . $teachers_block_vis . ';">',
+          'nocover' => TRUE,
+        );
         foreach ($teachers as $teacher) {
           $form['teacher_' . $subject['id'] . '_' . $teacher['id']] = array(
             'type'    => 'checkbox',
@@ -75,7 +81,11 @@ function edit_form($vars) {
             'checked' => !empty($group_info_array[$subject['id']]) && in_array($teacher['id'], $group_info_array[$subject['id']]),
           );
         }
-        $form['teacher_' . $subject['id'] . '_end_markup'] = array('type' => 'item', 'markup'  => '</div>', 'nocover' => TRUE);
+        $form['teacher_' . $subject['id'] . '_end_markup'] = array(
+          'type'    => 'item',
+          'markup'  => '</div>',
+          'nocover' => TRUE,
+        );
       }
       break;
     

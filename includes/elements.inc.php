@@ -75,6 +75,7 @@ function form($form_id, $vars = array()) {
       }
       
       $attributes = array(
+        'id'   => $element_name,
         'name' => $element_name,
         'type' => $form_element['type'],
       );
@@ -113,7 +114,7 @@ function form($form_id, $vars = array()) {
         
         case 'checkbox':
           $buil_element .= '<input' . tag_attributes($attributes) . '>';
-          $buil_element .= tag('span', $form_element['markup']);
+          $buil_element .= tag('label', $form_element['markup'], array('for' => $attributes['id']));
           break;
         
         case 'item':

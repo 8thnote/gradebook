@@ -108,7 +108,6 @@ ul.options li {
 
 div.teachers {
   border: 1px solid #000000;
-  height: 128px;
   overflow-y: auto;
   resize: vertical;
 }
